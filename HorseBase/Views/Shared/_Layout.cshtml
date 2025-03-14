@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HorseBase.styles.css" asp-append-version="true" />
     <style>
+        body {
+            overflow: hidden; /* Disable page scrolling */
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
         /* Add some CSS for the container */
         .horse-container {
             position: relative;
@@ -19,10 +25,12 @@
             background-size: cover; /* Makes sure the image covers the entire container */
             background-position: center; /* Centers the background image */
             background-repeat: no-repeat; /* Prevents the image from repeating */
+            padding: 20px;
         }
 
         .horse {
             position: absolute;
+            z-index: 1;
         }
 
         .tooltip {
@@ -36,29 +44,22 @@
             z-index: 10;
         }
 
-        .container {
-            position: absolute;
-            z-index: 2;
-        }
-
         /* Styling for login partial overlay */
         .login-overlay {
             width: 200px;
-            height: 100px;
+            height: 100px; /* Increased height to accommodate buttons */
             position: absolute;
-            top: 10px;
             right: 10px;
             z-index: 100; /* Ensure it appears on top */
-            background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
+            padding: 5px;
             border-radius: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-around; /* Space between buttons */
+            justify-content: normal; /* Space between buttons */
+            gap: 20px;
         }
-
-
     </style>
 </head>
 <body>

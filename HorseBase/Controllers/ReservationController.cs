@@ -51,7 +51,7 @@ namespace HorseBase.Controllers
                 Reservation reservation = new Reservation()
                 {
                     Horse = horse,
-                    Price = reservationRequest.Price,
+                    Price = (double)reservationRequest.Price,
                     TakeHour = reservationRequest.TakeHour,
                     ReturnHour = reservationRequest.ReturnHour,
                     UserId = user.Id

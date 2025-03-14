@@ -1,63 +1,258 @@
-﻿@model Horse
+﻿@model HorseBase.Models.Horse
 
 @{
     ViewData["Title"] = "Details";
 }
 
+<style>
+    /* Centered container with vertical alignment */
+    .container {
+        background: rgba(230, 200, 160);
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-width: 600px;
+        margin: 0 auto; /* Center horizontally */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        max-height: 95vh; /* Enable vertical scrolling */
+        overflow-y: auto;
+        scrollbar-color: #8ea7e9 #f8f9fa;
+        scrollbar-width: thin;
+        position: relative;
+        z-index: 2;
+    }
 
-<h1>Details</h1>
+        /* Scrollbar styling for Webkit browsers */
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
 
-<div>
-    <h4>Horse</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Number)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Number)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Breed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Breed.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirhtYear)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirhtYear)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Height)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Height)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhotoPath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhotoPath)
-        </dd>
+        .container::-webkit-scrollbar-track {
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: #8ea7e9;
+            border-radius: 10px;
+        }
+
+    .big-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #343a40;
+    }
+
+    /* Definition list styling */
+    .dl-details {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+        .dl-details > div {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+    dt {
+        font-weight: 600;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    dd {
+        margin: 0;
+        color: #343a40;
+        font-size: 1.1rem;
+    }
+
+    /* Button styling */
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+        border: none;
+        padding: 0.6rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+        }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #8ea7e9, #a8c0ff);
+        border: none;
+        padding: 0.6rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+    }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #6d93d9, #87a9e6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+        }
+
+    /* Centered button group */
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    /* Responsive image carousel */
+    .photo-preview-container {
+        position: relative;
+        max-width: 300px;
+        height: auto;
+        margin: 1rem auto;
+    }
+
+    .photo-preview {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+    }
+
+        .photo-preview.active {
+            opacity: 1;
+        }
+
+    .photo-indicators {
+        display: flex;
+        justify-content: center;
+        margin-top: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .photo-indicator {
+        width: 10px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .photo-indicator.active {
+            background: rgba(255, 255, 255, 1);
+        }
+</style>
+
+<div class="container">
+    <h1 class="big-title">HORSE DETAILS</h1>
+
+    <dl class="dl-details">
+        <!-- Photo Preview -->
+        <div>
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.PhotoPath))
+                {
+                    var imagePaths = Model.PhotoPath.Split(',');
+                    <div class="photo-preview-container">
+                        @foreach (var path in imagePaths)
+                        {
+                            <img src="@path.Trim()" class="photo-preview" />
+                        }
+                        <div class="photo-indicators">
+                            @for (int i = 0; i < imagePaths.Length; i++)
+                            {
+                                <div class="photo-indicator @(i == 0 ? "active" : "")" data-index="@i"></div>
+                            }
+                        </div>
+                    </div>
+                }
+            </dd>
+        </div>
+        <div>
+            <dt>@Html.DisplayNameFor(model => model.Number)</dt>
+            <dd>@Html.DisplayFor(model => model.Number)</dd>
+        </div>
+        <div>
+            <dt>@Html.DisplayNameFor(model => model.Breed.Name)</dt>
+            <dd>@Html.DisplayFor(model => model.Breed.Name)</dd>
+        </div>
+        <div>
+            <dt>@Html.DisplayNameFor(model => model.BirhtYear)</dt>
+            <dd>@Html.DisplayFor(model => model.BirhtYear)</dd>
+        </div>
+        <div>
+            <dt>@Html.DisplayNameFor(model => model.Gender)</dt>
+            <dd>@Html.DisplayFor(model => model.Gender)</dd>
+        </div>
+        <div>
+            <dt>@Html.DisplayNameFor(model => model.Height)</dt>
+            <dd>@Html.DisplayFor(model => model.Height)</dd>
+        </div>
+        <div>
+            <dt>@Html.DisplayNameFor(model => model.Price)</dt>
+            <dd>@Html.DisplayFor(model => model.Price)</dd>
+        </div>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a> |
-    <a asp-controller="Reservation" asp-action="Create" asp-route-horseId="@Model?.Id" class="btn btn-primary">Reserve</a>
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-controller="Reservation" asp-action="Create" asp-route-horseId="@Model.Id" class="btn btn-primary">Reserve</a>
+    </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const imagePaths = "@Model.PhotoPath".split(',').map(path => path.trim());
+        if (imagePaths.length <= 1) return; // Exit if there's only one image
+
+        const photos = document.querySelectorAll('.photo-preview');
+        const indicators = document.querySelectorAll('.photo-indicator');
+        let currentIndex = 0;
+
+        function showImage(index) {
+            // Hide all images
+            photos.forEach(photo => photo.classList.remove('active'));
+            // Show the selected image
+            photos[index].classList.add('active');
+            // Update indicators
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % imagePaths.length;
+            showImage(currentIndex);
+        }
+
+        // Automatic image change every 5 seconds
+        setInterval(nextImage, 5000);
+
+        // Manual image change on indicator click
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                showImage(currentIndex);
+            });
+        });
+
+        // Initialize the first image
+        showImage(currentIndex);
+    });
+</script>

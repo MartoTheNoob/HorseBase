@@ -4,48 +4,165 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    /* Add this to your site.css or a new CSS file */
+    .create-form {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 1.5rem; /* Reduced padding for shorter page */
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        max-width: 500px;
+        margin: 1rem auto; /* Reduced margin for shorter page */
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    .big-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1.5rem; /* Space below the title */
+        color: #343a40;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Number</th>
-            <th>Breed</th>
-            <th>Year of Birth</th>
-            <th>Gender</th>
-            <th>Height</th>
-            <th>Price</th>
-            <th>Photo</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Number)</td>
-                <td>@Html.DisplayFor(modelItem => item.Breed.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.BirhtYear)</td>
-                <td>@Html.DisplayFor(modelItem => item.Gender)</td>
-                <td>@Html.DisplayFor(modelItem => item.Height)</td>
-                <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.PhotoPath))
-                    {
-                        var imagePaths = item.PhotoPath.Split(',');
-                        <img src="@imagePaths.First()" style="width: 100px; height: auto;" />
-                    }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+    .container {
+        background: rgb(230, 200, 160);
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        max-height: 95vh; /* Match viewport height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        scrollbar-color: rgb(230, 200, 160) #f8f9fa;
+        scrollbar-width: thin;
+        position: relative;
+        z-index: 2;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    /* Table styling */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+        .table th,
+        .table td {
+            padding: 0.8rem 1rem;
+            text-align: center;
+            border: none;
         }
-    </tbody>
-</table>
+
+        .table tbody tr {
+            position: relative;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: rgba(142, 167, 233, 0.3);
+            }
+
+        .table thead {
+            background: rgba(255, 255, 255, 0.2);
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+        border: none;
+        padding: 0.4rem 1rem; /* Reduced padding */
+        border-radius: 15px; /* Smaller radius */
+        font-size: 14px; /* Smaller text */
+        margin: 0.2rem 0; /* Vertical spacing between buttons */
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(142, 167, 233, 0.2);
+        font-weight: 500;
+        width: 100%; /* Full-width buttons */
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(142, 167, 233, 0.3);
+        }
+
+    /* Page background styling */
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+    }
+</style>
+
+<div class="container">
+    <h1 class="big-title">HORSES</h1>
+    <p style="text-align: center;">
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Breed</th>
+                <th>Year of Birth</th>
+                <th>Gender</th>
+                <th>Height</th>
+                <th>Price</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Number)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Breed.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.BirhtYear)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Height)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.PhotoPath))
+                        {
+                            var imagePaths = item.PhotoPath.Split(',');
+                            <img src="@imagePaths.First()" style="width: 100px; height: auto;" />
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

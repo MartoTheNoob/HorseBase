@@ -4,69 +4,203 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<style>
+    /* Consistent container styling */
+    .container {
+        background: rgba(230, 200, 160);
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-width: 500px;
+        margin: 0 auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        max-height: 95vh; /* Enable vertical scrolling */
+        overflow-y: auto; /* Add vertical scrollbar when needed */
+        scrollbar-color: #8ea7e9 #f8f9fa; /* Custom scrollbar colors */
+        scrollbar-width: thin; /* Thin scrollbar for modern browsers */
+        position: relative;
+        z-index: 2;
+    }
 
-<h4>Horse</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BreedId" class="control-label"></label>
-                <select asp-for="BreedId" class="form-control" asp-items="ViewBag.BreedId"></select>
-                <span asp-validation-for="BreedId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BirhtYear" class="control-label"></label>
-                <input asp-for="BirhtYear" class="form-control" />
-                <span asp-validation-for="BirhtYear" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Gender</label>
-                <div>
-                    <label>
-                        <input type="radio" asp-for="Gender" value="Male" /> Male
-                    </label>
-                    <label>
-                        <input type="radio" asp-for="Gender" value="Female" /> Female
-                    </label>
-                </div>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
+        /* Scrollbar styling for Webkit browsers */
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
 
-            <div class="form-group">
-                <label asp-for="Height" class="control-label"></label>
-                <input asp-for="Height" class="form-control" />
-                <span asp-validation-for="Height" class="text-danger"></span>
+        .container::-webkit-scrollbar-track {
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: #8ea7e9;
+            border-radius: 10px;
+        }
+
+    .big-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #343a40;
+    }
+
+    /* Form group styling */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-size: 18px;
+            color: #343a40;
+        }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        color: #343a40;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+    /* Radio button styling */
+    .radio-container {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        font-size: 14px;
+        color: #343a40;
+    }
+
+        .radio-container input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+    /* Primary button styling */
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+        border: none;
+        padding: 0.6rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+        width: 100%;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+        }
+
+    /* Secondary button styling */
+    .btn-secondary {
+        background: linear-gradient(135deg, #8ea7e9, #a8c0ff);
+        border: none;
+        padding: 0.6rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+        width: 100%;
+    }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #6d93d9, #87a9e6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+        }
+</style>
+
+<div class="container">
+    <h1 class="big-title">EDIT HORSE</h1>
+
+    <form asp-action="Edit" class="d-flex flex-column">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Number Field -->
+        <div class="form-group">
+            <label asp-for="Number" class="control-label"></label>
+            <input asp-for="Number" class="form-control" />
+            <span asp-validation-for="Number" class="text-danger"></span>
+        </div>
+
+        <!-- Breed Field -->
+        <div class="form-group">
+            <label asp-for="BreedId" class="control-label"></label>
+            <select asp-for="BreedId" class="form-control" asp-items="ViewBag.BreedId"></select>
+            <span asp-validation-for="BreedId" class="text-danger"></span>
+        </div>
+
+        <!-- Birth Year Field -->
+        <div class="form-group">
+            <label asp-for="BirhtYear" class="control-label"></label>
+            <input asp-for="BirhtYear" class="form-control" />
+            <span asp-validation-for="BirhtYear" class="text-danger"></span>
+        </div>
+
+        <!-- Gender Field -->
+        <div class="form-group">
+            <label class="control-label">Gender</label>
+            <div class="radio-container">
+                <label>
+                    <input type="radio" asp-for="Gender" value="Male" /> Male
+                </label>
+                <label>
+                    <input type="radio" asp-for="Gender" value="Female" /> Female
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhotoPath" class="control-label"></label>
-                <input asp-for="PhotoPath" class="form-control" />
-                <span asp-validation-for="PhotoPath" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <!-- Height Field -->
+        <div class="form-group">
+            <label asp-for="Height" class="control-label"></label>
+            <input asp-for="Height" class="form-control" />
+            <span asp-validation-for="Height" class="text-danger"></span>
+        </div>
+
+        <!-- Price Field -->
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <!-- Photo Path Field -->
+        <div class="form-group">
+            <label asp-for="PhotoPath" class="control-label"></label>
+            <input asp-for="PhotoPath" class="form-control" />
+            <span asp-validation-for="PhotoPath" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <!-- Back to List Button -->
+    <div style="text-align: center; margin-top: 1rem;">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

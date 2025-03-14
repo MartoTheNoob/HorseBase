@@ -23,8 +23,7 @@ namespace HorseBase.Models.ViewModels
         [Required, Display(Name = "Дата и час на връщане")]
         public DateTime ReturnHour { get; set; }
 
-        [DataType(DataType.Currency)]
         [Required, Display(Name = "Цена")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
     }
 }

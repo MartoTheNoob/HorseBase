@@ -34,29 +34,37 @@
             left: 50%; /* Center horizontally */
             transform: translateX(-50%); /* Perfectly center the button */
             z-index: 110; /* Ensure it appears above the overlay */
-            background-color: #007bff; /* Blue color */
-            color: white;
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Subtle gradient for modern look */
+            color: #333; /* Dark text for contrast */
             border: none;
-            padding: 20px 40px;
-            font-size: 18px;
-            border-radius: 5px;
+            padding: 15px 30px; /* Padding for content spacing */
+            font-size: 16px; /* Font size */
+            border-radius: 8px; /* Rounded corners */
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: block; /* Ensure the button is visible */
-            height: 200px;
-            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            height: 50px; /* Auto height based on content */
+            width: 200px; /* Auto width based on content */
+            font-weight: bold;
+            text-transform: uppercase; /* Uppercase text */
+            letter-spacing: 1px; /* Spacing between letters */
+            transition: all 0.3s ease; /* Smooth transitions */
+            outline: none; /* Remove default focus outline */
         }
 
+            /* Hover Effect - Semi-Transparent Background */
             .big-button:hover {
-                background-color: #0056b3; /* Darker blue on hover */
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.5)); /* Semi-transparent gradient */
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for modern effect */
+                color: #2c3e50; /* Slightly darker text for better contrast */
             }
-    </style>
+
+</style>
 </head>
 <body>
     <!-- Logo -->
     <img src="/images/logo.png" alt="Logo" class="logo">
 
     <!-- Big Button -->
-    <button class="big-button">Click Me!</button>
+    <a asp-controller="Horse" asp-action="Index" class="button big-button">Click Me!</a>
 </body>
 </html>
