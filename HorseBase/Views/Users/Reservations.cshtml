@@ -1,8 +1,4 @@
-﻿@model List<HorseBase.Models.ViewModels.User.UserViewModel>
-
-@{
-    ViewData["Title"] = "User List";
-}
+﻿@model List<Reservation>
 
 <style>
     /* Consistent container styling */
@@ -104,42 +100,34 @@
 </style>
 
 <div class="container">
-    <h1 class="big-title">USER LIST</h1>
-
-    <form method="post" action="@Url.Action("UpdateStatus", "Users")">
-        <table class="table">
-            <thead>
+    <h1 class="big-title">RESERVATIONS</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Breed</th>
+                <th>Take Hour</th>
+                <th>Return Hour</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Reservation item in Model)
+            {
                 <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>First Name</th>
-                    <th>Middle Name</th>
-                    <th>Last Name</th>
-                    <th>Is Active</th>
-                    <th>Roles</th>
+                    <td>@Html.DisplayFor(modelItem => item.Horse.Number)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Horse.Breed.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TakeHour)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ReturnHour)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>
+                        <a asp-controller="Horse" asp-action="Details" asp-route-id="@item.Horse.Id" class="btn btn-primary">
+                            Details for horse
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
-                    <tr>
-                        <td>@user.UserName</td>
-                        <td>@user.Email</td>
-                        <td>@user.FirstName</td>
-                        <td>@user.MiddleName</td>
-                        <td>@user.LastName</td>
-                        <td>
-                            <input type="checkbox" name="isActive_@user.Id" @(user.IsActive ? "checked" : "") />
-                        </td>
-                        <td>@string.Join(", ", user.Roles)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <!-- Submit Button -->
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-    </form>
+            }
+        </tbody>
+    </table>
 </div>

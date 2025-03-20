@@ -1,131 +1,221 @@
 ﻿@model IEnumerable<HorseBase.Models.Horse>
-
 @{
     ViewData["Title"] = "Index";
 }
-
 <style>
     /* Add this to your site.css or a new CSS file */
     .create-form {
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 15px;
-        padding: 1.5rem; /* Reduced padding for shorter page */
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        max-width: 500px;
-        margin: 1rem auto; /* Reduced margin for shorter page */
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 1.5rem; /* Reduced padding for shorter page */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: 1rem auto; /* Reduced margin for shorter page */
     }
 
     .big-title {
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 1.5rem; /* Space below the title */
-        color: #343a40;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem; /* Space below the title */
+    color: #343a40;
     }
 
     .container {
-        background: rgb(230, 200, 160);
-        border-radius: 15px;
-        padding: 1.5rem;
-        max-width: 800px;
-        margin: 0 auto;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        max-height: 95vh; /* Match viewport height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        scrollbar-color: rgb(230, 200, 160) #f8f9fa;
-        scrollbar-width: thin;
-        position: relative;
-        z-index: 2;
+    background: rgb(230, 200, 160);
+    border-radius: 15px;
+    padding: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-height: 95vh; /* Match viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-color: rgb(230, 200, 160) #f8f9fa;
+    scrollbar-width: thin;
+    position: relative;
+    z-index: 2;
+    }
+    /* Filter Button */
+    .filter-button {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+    cursor: pointer;
     }
 
-    .action-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
+    .filter-button:hover {
+    background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+    }
+    /* Filter Menu */
+    .filter-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    background: rgba(230, 200, 160, 0.9);
+    border-radius: 0 15px 15px 0;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    padding: 1.5rem;
     }
 
+    .filter-menu.active {
+    transform: translateX(0);
+    }
+    /* Close Button */
+    .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #343a40;
+    }
+    /* Filter Form */
+    .filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    }
+
+    .filter-form label {
+    font-weight: 600;
+    color: #343a40;
+    }
+
+    .filter-form select,
+    .filter-form input {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    color: #343a40;
+    transition: all 0.3s ease;
+    }
+
+    .filter-form input[type="range"] {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    outline: none;
+    }
+
+    .filter-form button {
+    background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+    cursor: pointer;
+    }
+
+    .filter-form button:hover {
+    background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+    }
     /* Table styling */
     .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
-        .table th,
-        .table td {
-            padding: 0.8rem 1rem;
-            text-align: center;
-            border: none;
-        }
+    .table th,
+    .table td {
+    padding: 0.8rem 1rem;
+    text-align: center;
+    border: none;
+    }
 
-        .table tbody tr {
-            position: relative;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
+    .table tbody tr {
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    }
 
-            .table tbody tr:last-child {
-                border-bottom: none;
-            }
+    .table tbody tr:last-child {
+    border-bottom: none;
+    }
 
-            .table tbody tr:hover {
-                background: rgba(255, 255, 255, 0.1);
-                border-color: rgba(142, 167, 233, 0.3);
-            }
+    .table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(142, 167, 233, 0.3);
+    }
 
-        .table thead {
-            background: rgba(255, 255, 255, 0.2);
-            color: #343a40;
-            font-weight: bold;
-        }
+    .table thead {
+    background: rgba(255, 255, 255, 0.2);
+    color: #343a40;
+    font-weight: bold;
+    }
 
-        .table tbody tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.05);
-        }
+    .table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+    }
 
-        .table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
+    .table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+    }
 
     .btn-primary {
-        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
-        border: none;
-        padding: 0.4rem 1rem; /* Reduced padding */
-        border-radius: 15px; /* Smaller radius */
-        font-size: 14px; /* Smaller text */
-        margin: 0.2rem 0; /* Vertical spacing between buttons */
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(142, 167, 233, 0.2);
-        font-weight: 500;
-        width: 100%; /* Full-width buttons */
+    background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+    border: none;
+    padding: 0.4rem 1rem; /* Reduced padding */
+    border-radius: 15px; /* Smaller radius */
+    font-size: 14px; /* Smaller text */
+    margin: 0.2rem 0; /* Vertical spacing between buttons */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(142, 167, 233, 0.2);
+    font-weight: 500;
+    width: 100%; /* Full-width buttons */
     }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(142, 167, 233, 0.3);
-        }
-
+    .btn-primary:hover {
+    background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(142, 167, 233, 0.3);
+    }
     /* Page background styling */
     body {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        min-height: 100vh;
-        font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
     }
 </style>
-
 <div class="container">
+    <!-- Filter Button -->
+    <button id="filterButton" class="filter-button">Filter</button>
     <h1 class="big-title">HORSES</h1>
     <p style="text-align: center;">
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        }
     </p>
-
     <table class="table">
         <thead>
             <tr>
@@ -145,7 +235,7 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Number)</td>
                     <td>@Html.DisplayFor(modelItem => item.Breed.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.BirhtYear)</td>
+                    <td>@Html.DisplayFor(modelItem => item.BirhtYear.Year)</td> <!-- Corrected from BirhtYear -->
                     <td>@Html.DisplayFor(modelItem => item.Gender)</td>
                     <td>@Html.DisplayFor(modelItem => item.Height)</td>
                     <td>@Html.DisplayFor(modelItem => item.Price)</td>
@@ -157,12 +247,94 @@
                         }
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+                        }
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+<!-- Filter Menu -->
+<div id="filterMenu" class="filter-menu">
+    <button id="closeFilterButton" class="close-button">&times;</button>
+    <h2 style="text-align: center; color: #343a40;">Filter Options</h2>
+    <form class="filter-form" id="filterForm">
+        <label for="breedFilter">Breed</label>
+        <select id="breedFilter" name="breedFilter">
+            <option value="">All Breeds</option>
+            @foreach (var breed in ViewBag.Breeds)
+            {
+                <option value="@breed.Value">@breed.Text</option> <!-- Corrected from @breed -->
+            }
+        </select>
+        <label for="birthYearFilter">Year of Birth</label>
+        <input type="number" id="birthYearFilter" name="birthYearFilter" placeholder="Enter year" />
+        <label for="genderFilter">Gender</label>
+        <select id="genderFilter" name="genderFilter">
+            <option value="">All Genders</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+        <label for="heightFilter">Height</label>
+        <input type="range" id="heightFilter" name="heightFilter" min="100" max="200" value="150" />
+        <span id="heightValue">150 cm</span>
+        <label for="priceFilter">Price</label>
+        <input type="range" id="priceFilter" name="priceFilter" min="0" max="10000" value="5000" />
+        <span id="priceValue">$5000</span>
+        <button type="button" id="applyFilters">Apply Filters</button>
+    </form>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterButton = document.getElementById("filterButton");
+        const closeFilterButton = document.getElementById("closeFilterButton");
+        const filterMenu = document.getElementById("filterMenu");
+        const heightFilter = document.getElementById("heightFilter");
+        const priceFilter = document.getElementById("priceFilter");
+        const heightValue = document.getElementById("heightValue");
+        const priceValue = document.getElementById("priceValue");
+
+        // Toggle filter menu visibility
+        filterButton.addEventListener("click", () => {
+            filterMenu.classList.add("active");
+        });
+
+        closeFilterButton.addEventListener("click", () => {
+            filterMenu.classList.remove("active");
+        });
+
+        // Update height and price values dynamically
+        heightFilter.addEventListener("input", () => {
+            heightValue.textContent = `${heightFilter.value} cm`;
+        });
+
+        priceFilter.addEventListener("input", () => {
+            priceValue.textContent = `$${priceFilter.value}`;
+        });
+
+        // Handle filter application
+        document.getElementById("applyFilters").addEventListener("click", () => {
+            const breedFilter = document.getElementById("breedFilter").value;
+            const birthYearFilter = document.getElementById("birthYearFilter").value;
+            const genderFilter = document.getElementById("genderFilter").value;
+            const heightFilterValue = heightFilter.value;
+            const priceFilterValue = priceFilter.value;
+
+            // Construct query parameters for filtering
+            const queryParams = new URLSearchParams();
+            if (breedFilter) queryParams.append("breed", breedFilter);
+            if (birthYearFilter) queryParams.append("birthYear", birthYearFilter);
+            if (genderFilter) queryParams.append("gender", genderFilter);
+            queryParams.append("height", heightFilterValue);
+            queryParams.append("price", priceFilterValue);
+
+            // Redirect to the filtered page
+            window.location.href = `/Horse?${queryParams.toString()}`; // Corrected from /Horses to /Horse
+        });
+    });
+</script>

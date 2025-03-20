@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HorseBase.Data;
-using Newtonsoft.Json;
 using HorseBase.Models;
+using System.Linq;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace HorseBase.Controllers
 {
     public class HorseController : Controller
     {
-
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -20,10 +21,49 @@ namespace HorseBase.Controllers
         }
 
         // GET: Horse
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+            string breed,
+            int? birthYear,
+            string gender,
+            int? height,
+            int? price)
         {
-            var applicationDbContext = _context.horses.Include(h => h.Breed);
-            return View(await applicationDbContext.ToListAsync());
+            // Start with the base query
+            var horsesQuery = _context.horses.Include(h => h.Breed).AsQueryable();
+
+            // Apply filters if they are provided
+            if (!string.IsNullOrEmpty(breed))
+            {
+                horsesQuery = horsesQuery.Where(h => h.Breed.Name == breed);
+            }
+
+            if (birthYear.HasValue)
+            {
+                horsesQuery = horsesQuery.Where(h => h.BirhtYear.Year == birthYear.Value);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                horsesQuery = horsesQuery.Where(h => h.Gender == gender);
+            }
+
+            if (height.HasValue)
+            {
+                horsesQuery = horsesQuery.Where(h => h.Height <= height.Value);
+            }
+
+            if (price.HasValue)
+            {
+                horsesQuery = horsesQuery.Where(h => h.Price <= price.Value);
+            }
+
+            // Pass filtered data to the view
+            var horses = await horsesQuery.ToListAsync();
+
+            // Populate ViewBag for filter options
+            ViewBag.Breeds = new SelectList(_context.breeds, "Name", "Name");
+
+            return View(horses);
         }
 
         // GET: Horse/Details/5
@@ -54,7 +94,7 @@ namespace HorseBase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Number,BreedId,BirhtYear,Gender,Height,Price,PhotoPath")] Horse horse, IFormFile[] photos)
+        public async Task<IActionResult> Create([Bind("Id,Number,BreedId,BirthYear,Gender,Height,Price,PhotoPath")] Horse horse, IFormFile[] photos)
         {
             if (photos != null && photos.Length > 0)
             {
@@ -89,7 +129,6 @@ namespace HorseBase.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // GET: Horse/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -108,17 +147,14 @@ namespace HorseBase.Controllers
         }
 
         // POST: Horse/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Number,BreedId,BirhtYear,Gender,Height,Price,PhotoPath")] Horse horse)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Number,BreedId,BirthYear,Gender,Height,Price,PhotoPath")] Horse horse)
         {
             if (id != horse.Id)
             {
                 return NotFound();
             }
-
 
             try
             {

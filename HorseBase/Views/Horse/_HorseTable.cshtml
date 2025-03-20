@@ -1,0 +1,41 @@
+﻿@model IEnumerable<HorseBase.Models.Horse>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Breed</th>
+            <th>Year of Birth</th>
+            <th>Gender</th>
+            <th>Height</th>
+            <th>Price</th>
+            <th>Photo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Number)</td>
+                <td>@Html.DisplayFor(modelItem => item.Breed.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.BirhtYear.Year)</td> <!-- Corrected from BirhtYear -->
+                <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                <td>@Html.DisplayFor(modelItem => item.Height)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.PhotoPath))
+                    {
+                        var imagePaths = item.PhotoPath.Split(',');
+                        <img src="@imagePaths.First()" style="width: 100px; height: auto;" />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using HorseBase.Models.ViewModels.User;
 using HorseBase.Models;
+using HorseBase.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace HorseBase.Controllers
 {
@@ -9,10 +11,12 @@ namespace HorseBase.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        public UsersController(UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly  ApplicationDbContext _context;
+        public UsersController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
         [HttpGet]
         public IActionResult Register()
@@ -150,6 +154,12 @@ namespace HorseBase.Controllers
             {
                 return View();
             }
+        }
+
+        public IActionResult Reservations()
+        {
+            List<Reservation> userReservation = _context.reservations.Include(x => x.Horse).ThenInclude(x => x.Breed).Where(x => x.User.UserName == User.Identity.Name).ToList();
+            return View(userReservation);
         }
 
     }

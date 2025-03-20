@@ -4,26 +4,113 @@
     ViewData["Title"] = "Log In";
 }
 
-<h2>@ViewData["Title"]</h2>
+<style>
+    /* Consistent container styling */
+    .container {
+        background: rgb(230, 200, 160);
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-width: 400px;
+        margin: 2rem auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+    .big-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #343a40;
+    }
+
+    /* Form group styling */
+    .form-group {
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 16px;
+            color: #343a40;
+        }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        color: #343a40;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+    /* Primary button styling */
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+        border: none;
+        padding: 0.6rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+        width: 100%;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+        }
+
+    /* Link styling */
+    .link {
+        color: #8ea7e9;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .link:hover {
+            color: #6d93d9;
+        }
+</style>
+
+<div class="container">
+    <h1 class="big-title">LOG IN</h1>
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </div>
+    </form>
+
+    <div style="margin-top: 1rem;">
+        Don't have an account? <a href="@Url.Action("Register", "Users")" class="link">Register</a>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Log In</button>
-</form>
-
-<div>
-    Don't have an account? <a href="@Url.Action("Register", "Users")">Register</a>
 </div>
 
 @section Scripts {

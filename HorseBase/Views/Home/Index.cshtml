@@ -10,61 +10,64 @@
     <style>
         /* General body styling */
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            position: relative; /* Ensure absolute positioning works within the body */
-            min-height: 100vh;
-            min-width: 100vw;
-            background-color: transparent; /* Ensure it doesn't conflict with the overlay */
+        margin: 0;
+        font-family: Arial, sans-serif;
+        position: relative; /* Ensure absolute positioning works within the body */
+        min-height: 100vh;
+        min-width: 100vw;
+        background-color: transparent; /* Ensure it doesn't conflict with the overlay */
         }
 
         /* Logo styling */
         .logo {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 150px; /* Adjust the size as needed */
-            z-index: 110; /* Ensure it appears above the overlay */
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 150px; /* Adjust the size as needed */
+        z-index: 110; /* Ensure it appears above the overlay */
         }
 
         /* Big Button styling */
         .big-button {
-            position: absolute;
-            bottom: 20px; /* Distance from the bottom */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Perfectly center the button */
-            z-index: 110; /* Ensure it appears above the overlay */
-            background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Subtle gradient for modern look */
-            color: #333; /* Dark text for contrast */
-            border: none;
-            padding: 15px 30px; /* Padding for content spacing */
-            font-size: 16px; /* Font size */
-            border-radius: 8px; /* Rounded corners */
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-            height: 50px; /* Auto height based on content */
-            width: 200px; /* Auto width based on content */
-            font-weight: bold;
-            text-transform: uppercase; /* Uppercase text */
-            letter-spacing: 1px; /* Spacing between letters */
-            transition: all 0.3s ease; /* Smooth transitions */
-            outline: none; /* Remove default focus outline */
+        position: absolute;
+        bottom: 20px; /* Distance from the bottom */
+        left: 50%; /* Center horizontally */
+        transform: translateX(-50%); /* Perfectly center the button */
+        z-index: 110; /* Ensure it appears above the overlay */
+        background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Subtle gradient for modern look */
+        color: #333; /* Dark text for contrast */
+        border: none;
+        padding: 15px 30px; /* Padding for content spacing */
+        font-size: 16px; /* Font size */
+        border-radius: 8px; /* Rounded corners */
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        height: 50px; /* Auto height based on content */
+        width: 200px; /* Auto width based on content */
+        font-weight: bold;
+        text-transform: uppercase; /* Uppercase text */
+        letter-spacing: 1px; /* Spacing between letters */
+        transition: all 0.3s ease; /* Smooth transitions */
+        outline: none; /* Remove default focus outline */
         }
 
-            /* Hover Effect - Semi-Transparent Background */
-            .big-button:hover {
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.5)); /* Semi-transparent gradient */
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for modern effect */
-                color: #2c3e50; /* Slightly darker text for better contrast */
-            }
+        /* Hover Effect - Semi-Transparent Background */
+        .big-button:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.5)); /* Semi-transparent gradient */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for modern effect */
+        color: #2c3e50; /* Slightly darker text for better contrast */
+        }
 
-</style>
+    </style>
 </head>
 <body>
     <!-- Logo -->
     <img src="/images/logo.png" alt="Logo" class="logo">
 
     <!-- Big Button -->
-    <a asp-controller="Horse" asp-action="Index" class="button big-button">Click Me!</a>
+    @if (User.IsInRole("Admin") || User.IsInRole("User"))
+    {
+    <a asp-controller="Horse" asp-action="Index" class="button big-button">Click Me!</a>        
+    }
 </body>
 </html>

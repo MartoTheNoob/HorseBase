@@ -1,164 +1,164 @@
 ﻿@model HorseBase.Models.ViewModels.ReservationViewModel
 
 @{
-    ViewData["Title"] = "Create Reservation";
+	ViewData["Title"] = "Create Reservation";
 }
 
 <style>
-    /* Consistent container styling */
-    .container {
-        background: rgba(230, 200, 160);
-        border-radius: 15px;
-        padding: 1.5rem;
-        max-width: 500px;
-        margin: 2rem auto;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(10px);
-        max-height: 85vh; /* Enable vertical scrolling */
-        overflow-y: auto; /* Add vertical scrollbar when needed */
-        scrollbar-color: #8ea7e9 #f8f9fa; /* Custom scrollbar colors */
-        scrollbar-width: thin; /* Thin scrollbar for modern browsers */
-        position: relative;
-        z-index: 2;
-    }
+	/* Consistent container styling */
+	.container {
+		background: rgba(230, 200, 160);
+		border-radius: 15px;
+		padding: 1.5rem;
+		max-width: 500px;
+		margin: 2rem auto;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		backdrop-filter: blur(10px);
+		max-height: 85vh; /* Enable vertical scrolling */
+		overflow-y: auto; /* Add vertical scrollbar when needed */
+		scrollbar-color: #8ea7e9 #f8f9fa; /* Custom scrollbar colors */
+		scrollbar-width: thin; /* Thin scrollbar for modern browsers */
+		position: relative;
+		z-index: 2;
+	}
 
-        /* Scrollbar styling for Webkit browsers */
-        .container::-webkit-scrollbar {
-            width: 8px;
-        }
+		/* Scrollbar styling for Webkit browsers */
+		.container::-webkit-scrollbar {
+			width: 8px;
+		}
 
-        .container::-webkit-scrollbar-track {
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
+		.container::-webkit-scrollbar-track {
+			background: #f8f9fa;
+			border-radius: 10px;
+		}
 
-        .container::-webkit-scrollbar-thumb {
-            background: #8ea7e9;
-            border-radius: 10px;
-        }
+		.container::-webkit-scrollbar-thumb {
+			background: #8ea7e9;
+			border-radius: 10px;
+		}
 
-    .big-title {
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 1.5rem;
-        color: #343a40;
-    }
+	.big-title {
+		font-size: 24px;
+		font-weight: bold;
+		text-align: center;
+		margin-bottom: 1.5rem;
+		color: #343a40;
+	}
 
-    /* Form group styling */
-    .form-group {
-        margin-bottom: 1rem;
-    }
+	/* Form group styling */
+	.form-group {
+		margin-bottom: 1rem;
+	}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            text-align: center;
-            font-size: 18px;
-            color: #343a40;
-        }
+		.form-group label {
+			display: block;
+			margin-bottom: 0.5rem;
+			text-align: center;
+			font-size: 18px;
+			color: #343a40;
+		}
 
-    .form-control {
-        background: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 8px;
-        padding: 0.6rem 1rem;
-        color: #343a40;
-        transition: all 0.3s ease;
-    }
+	.form-control {
+		background: rgba(255, 255, 255, 0.2);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 8px;
+		padding: 0.6rem 1rem;
+		color: #343a40;
+		transition: all 0.3s ease;
+	}
 
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
-            outline: none;
-        }
+		.form-control:focus {
+			background: rgba(255, 255, 255, 0.3);
+			border-color: rgba(255, 255, 255, 0.5);
+			box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+			outline: none;
+		}
 
-    /* Primary button styling */
-    .btn-primary {
-        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
-        border: none;
-        padding: 0.6rem 2rem;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
-        width: 100%;
-    }
+	/* Primary button styling */
+	.btn-primary {
+		background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+		border: none;
+		padding: 0.6rem 2rem;
+		border-radius: 25px;
+		font-weight: 600;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+		width: 100%;
+	}
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
-        }
+		.btn-primary:hover {
+			background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+		}
 
-    /* Read-only input styling */
-    .form-control[readonly] {
-        background: rgba(255, 255, 255, 0.1);
-        cursor: not-allowed;
-        color: #6c757d;
-    }
+	/* Read-only input styling */
+	.form-control[readonly] {
+		background: rgba(255, 255, 255, 0.1);
+		cursor: not-allowed;
+		color: #6c757d;
+	}
 </style>
 
 <div class="container">
-    <h1 class="big-title">CREATE RESERVATION</h1>
+	<h1 class="big-title">CREATE RESERVATION</h1>
 
-    <form asp-action="Create" method="post" class="d-flex flex-column">
-        <div class="form-group">
-            <label asp-for="TakeHour" class="control-label"></label>
-            <input asp-for="TakeHour" class="form-control" type="datetime-local" />
-            <span asp-validation-for="TakeHour" class="text-danger"></span>
-        </div>
+	<form asp-action="Create" method="post" class="d-flex flex-column">
+		<div class="form-group">
+			<label asp-for="TakeHour" class="control-label"></label>
+			<input asp-for="TakeHour" class="form-control" type="datetime-local" />
+			<span asp-validation-for="TakeHour" class="text-danger"></span>
+		</div>
 
-        <div class="form-group">
-            <label asp-for="ReturnHour" class="control-label"></label>
-            <input asp-for="ReturnHour" class="form-control" type="datetime-local" />
-            <span asp-validation-for="ReturnHour" class="text-danger"></span>
-        </div>
+		<div class="form-group">
+			<label asp-for="ReturnHour" class="control-label"></label>
+			<input asp-for="ReturnHour" class="form-control" type="datetime-local" />
+			<span asp-validation-for="ReturnHour" class="text-danger"></span>
+		</div>
 
-        <div class="form-group">
-            <label asp-for="Price" class="control-label">Total Price</label>
-            <input id="displayPrice" class="form-control" readonly />
-            <input asp-for="Price" type="hidden" id="submitPrice" />
-        </div>
+		<div class="form-group">
+			<label asp-for="Price" class="control-label">Total Price</label>
+			<input id="displayPrice" class="form-control" readonly />
+			<input asp-for="Price" type="text" id="submitPrice" hidden />
+		</div>
 
-        <input type="hidden" asp-for="HorseId" />
+		<input type="hidden" asp-for="HorseId" />
 
-        <!-- Submit Button -->
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Reserve</button>
-        </div>
-    </form>
+		<!-- Submit Button -->
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary">Reserve</button>
+		</div>
+	</form>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Safely parse the price from the model and ensure it's a number
-        const horsePricePerHour = parseFloat(@Html.Raw(Json.Serialize(Model.Horse?.Price ?? 0)));
+		document.addEventListener("DOMContentLoaded", function () {
+			// Safely parse the price from the model and ensure it's a number
+	const horsePricePerHour = parseFloat(@Html.Raw(Json.Serialize(Model.Horse?.Price ?? 0))) || 0;
 
-        const takeHourInput = document.querySelector("#TakeHour");
-        const returnHourInput = document.querySelector("#ReturnHour");
-        const displayPriceInput = document.querySelector("#displayPrice");
-        const submitPriceInput = document.querySelector("#submitPrice");
 
-        function calculatePrice() {
-            const takeHour = new Date(takeHourInput.value);
-            const returnHour = new Date(returnHourInput.value);
+			const takeHourInput = document.querySelector("#TakeHour");
+			const returnHourInput = document.querySelector("#ReturnHour");
+			const displayPriceInput = document.querySelector("#displayPrice");
+			const submitPriceInput = document.querySelector("#submitPrice");
 
-            if (takeHour && returnHour && returnHour > takeHour) {
-                const hours = Math.abs(returnHour - takeHour) / 36e5; // Convert milliseconds to hours
-                const totalPrice = (horsePricePerHour * hours).toFixed(2);
+			function calculatePrice() {
+				const takeHour = new Date(takeHourInput.value);
+				const returnHour = new Date(returnHourInput.value);
 
-                displayPriceInput.value = totalPrice; // Update the visible price
-                submitPriceInput.value = totalPrice; // Update the hidden price for submission
-            } else {
-                displayPriceInput.value = "0.00";
-                submitPriceInput.value = "0.00";
-            }
-        }
-
-        // Attach event listeners
-        takeHourInput.addEventListener("change", calculatePrice);
-        returnHourInput.addEventListener("change", calculatePrice);
-    });
+				if (takeHour && returnHour && returnHour > takeHour) {
+					const hours = Math.abs(returnHour - takeHour) / 36e5; // Convert milliseconds to hours
+						const totalPrice = parseFloat((horsePricePerHour * hours).toFixed(2));  // Ensure it's a number
+					displayPriceInput.value = totalPrice; // Update the visible price
+					submitPriceInput.value = totalPrice; // Update the hidden price for submission
+			console.log(submitPriceInput.value)
+				} else {
+					displayPriceInput.value = "0.00";
+					submitPriceInput.value = "0.00";
+				}
+			}
+			// Attach event listeners
+			takeHourInput.addEventListener("change", calculatePrice);
+			returnHourInput.addEventListener("change", calculatePrice);
+		});
 </script>

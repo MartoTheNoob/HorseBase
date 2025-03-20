@@ -115,32 +115,40 @@
     }
 
     /* Responsive image carousel */
+    /* Responsive image carousel */
     .photo-preview-container {
         position: relative;
-        max-width: 300px;
-        height: auto;
+        max-width: 100%; /* Ensure it doesn't exceed the parent container */
+        height: auto; /* Dynamically adjust height based on the image */
         margin: 1rem auto;
+        overflow: hidden; /* Prevent images from overflowing */
     }
 
+    /* Smooth transition for image changes */
     .photo-preview {
-        width: 100%;
-        height: auto;
+        width: 100%; /* Make the image responsive */
+        height: auto; /* Maintain aspect ratio */
         border-radius: 8px;
-        position: absolute;
+        position: absolute; /* Stack images on top of each other */
         top: 0;
         left: 0;
-        opacity: 0;
-        transition: opacity 0.8s ease-in-out;
+        opacity: 0; /* Start with invisible images */
+        transition: opacity 0.8s ease-in-out; /* Smooth fade effect */
+        z-index: 1; /* Ensure images stack properly */
+        display: none; /* Hide all images by default */
     }
 
         .photo-preview.active {
-            opacity: 1;
+            opacity: 1; /* Fully visible */
+            z-index: 2; /* Bring the active image to the front */
+            display: block; /* Show only the active image */
         }
 
+    /* Position indicators below the image */
     .photo-indicators {
         display: flex;
         justify-content: center;
-        margin-top: 0.5rem;
+        margin-top: 1rem; /* Space between image and indicators */
         gap: 0.5rem;
     }
 
@@ -173,12 +181,13 @@
                         {
                             <img src="@path.Trim()" class="photo-preview" />
                         }
-                        <div class="photo-indicators">
-                            @for (int i = 0; i < imagePaths.Length; i++)
-                            {
-                                <div class="photo-indicator @(i == 0 ? "active" : "")" data-index="@i"></div>
-                            }
-                        </div>
+                    </div>
+                    <!-- Move indicators below the image -->
+                    <div class="photo-indicators">
+                        @for (int i = 0; i < imagePaths.Length; i++)
+                        {
+                            <div class="photo-indicator @(i == 0 ? "active" : "")" data-index="@i"></div>
+                        }
                     </div>
                 }
             </dd>
@@ -217,9 +226,9 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+       document.addEventListener("DOMContentLoaded", function () {
         const imagePaths = "@Model.PhotoPath".split(',').map(path => path.trim());
-        if (imagePaths.length <= 1) return; // Exit if there's only one image
+        if (imagePaths.length <= 0) return; // Exit if no images exist
 
         const photos = document.querySelectorAll('.photo-preview');
         const indicators = document.querySelectorAll('.photo-indicator');
@@ -227,28 +236,46 @@
 
         function showImage(index) {
             // Hide all images
-            photos.forEach(photo => photo.classList.remove('active'));
-            // Show the selected image
-            photos[index].classList.add('active');
+            photos.forEach(photo => photo.style.display = 'none');
+
+            // Update the index
+            currentIndex = index;
+
+            // Show the new image
+            const newPhoto = photos[currentIndex];
+            newPhoto.style.display = 'block';
+            newPhoto.classList.add('active');
+
             // Update indicators
             indicators.forEach((indicator, i) => {
-                indicator.classList.toggle('active', i === index);
+                indicator.classList.toggle('active', i === currentIndex);
             });
+
+            // Adjust the container height to match the active image
+            const container = document.querySelector('.photo-preview-container');
+            container.style.height = `${newPhoto.offsetHeight}px`;
         }
 
         function nextImage() {
+            // Increment the index and loop back to 0 if at the end
             currentIndex = (currentIndex + 1) % imagePaths.length;
             showImage(currentIndex);
         }
 
         // Automatic image change every 5 seconds
-        setInterval(nextImage, 5000);
+        setInterval(nextImage, 7000);
 
         // Manual image change on indicator click
         indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
-                currentIndex = index;
-                showImage(currentIndex);
+                showImage(index);
+            });
+        });
+
+        // Allow users to click on images to select them
+        photos.forEach((photo, index) => {
+            photo.addEventListener('click', () => {
+                showImage(index);
             });
         });
 
