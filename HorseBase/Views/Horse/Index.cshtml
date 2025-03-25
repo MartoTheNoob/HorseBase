@@ -1,340 +1,597 @@
-﻿@model IEnumerable<HorseBase.Models.Horse>
-@{
-    ViewData["Title"] = "Index";
-}
-<style>
-    /* Add this to your site.css or a new CSS file */
-    .create-form {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 15px;
-    padding: 1.5rem; /* Reduced padding for shorter page */
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    max-width: 500px;
-    margin: 1rem auto; /* Reduced margin for shorter page */
-    }
+﻿	@model IEnumerable<HorseBase.Models.Horse>
+	@{
+		ViewData["Title"] = "Index";
+	}
+	<style>
+		/* Add this to your site.css or a new CSS file */
+		.create-form {
+			background: rgba(255, 255, 255, 0.15);
+			border-radius: 15px;
+			padding: 1.5rem; /* Reduced padding for shorter page */
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+			max-width: 500px;
+			margin: 1rem auto; /* Reduced margin for shorter page */
+		}
 
-    .big-title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1.5rem; /* Space below the title */
-    color: #343a40;
-    }
+		.big-title {
+			font-size: 24px;
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 1.5rem; /* Space below the title */
+			color: #343a40;
+		}
 
-    .container {
-    background: rgb(230, 200, 160);
-    border-radius: 15px;
-    padding: 1.5rem;
-    max-width: 1000px;
-    margin: 0 auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-height: 95vh; /* Match viewport height */
-    overflow-y: auto; /* Enable vertical scrolling */
-    scrollbar-color: rgb(230, 200, 160) #f8f9fa;
-    scrollbar-width: thin;
-    position: relative;
-    z-index: 2;
-    }
-    /* Filter Button */
-    .filter-button {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 15px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
-    cursor: pointer;
-    }
+		.container {
+			background: rgb(230, 200, 160);
+			border-radius: 15px;
+			padding: 1.5rem;
+			max-width: 1000px;
+			margin: 0 auto;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			max-height: 95vh; /* Match viewport height */
+			overflow-y: auto; /* Enable vertical scrolling */
+			scrollbar-color: rgb(230, 200, 160) #f8f9fa;
+			scrollbar-width: thin;
+			position: relative;
+			z-index: 2;
+		}
 
-    .filter-button:hover {
-    background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
-    }
-    /* Filter Menu */
-    .filter-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
-    height: 100%;
-    background: rgba(230, 200, 160, 0.9);
-    border-radius: 0 15px 15px 0;
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    z-index: 10;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-    overflow-y: auto;
-    padding: 1.5rem;
-    }
+	/* Search Bar */
+	.filter-form input[type="text"] {
+		background: rgba(255, 255, 255, 0.2);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 8px;
+		padding: 0.6rem 1rem;
+		color: #343a40;
+		transition: all 0.3s ease;
+	}
 
-    .filter-menu.active {
-    transform: translateX(0);
-    }
-    /* Close Button */
-    .close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #343a40;
-    }
-    /* Filter Form */
-    .filter-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    }
+	/* Block View Styling */
+	.block-container {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		justify-content: center;
+		margin-top: 1rem;
+	}
 
-    .filter-form label {
-    font-weight: 600;
-    color: #343a40;
-    }
+	.block-item {
+		background: rgba(255, 255, 255, 0.15);
+		border-radius: 10px;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+		width: calc(33% - 1rem); /* Adjust for 3 items per row */
+		padding: 1rem;
+		text-align: center;
+		transition: transform 0.3s ease;
+	}
 
-    .filter-form select,
-    .filter-form input {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    color: #343a40;
-    transition: all 0.3s ease;
-    }
+		.block-item:hover {
+			transform: scale(1.05);
+		}
 
-    .filter-form input[type="range"] {
-    height: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    outline: none;
-    }
+		.block-item img {
+			width: 100%;
+			height: auto;
+			border-radius: 8px;
+		}
 
-    .filter-form button {
-    background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 15px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
-    cursor: pointer;
-    }
+		.block-item .number {
+			font-size: 1.2rem;
+			font-weight: bold;
+			margin-top: 0.5rem;
+		}
 
-    .filter-form button:hover {
-    background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
-    }
-    /* Table styling */
-    .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    }
+		.block-item .breed {
+			font-size: 1rem;
+			color: #555;
+			margin-top: 0.5rem;
+		}
+		/* Filter Button */
+		.filter-button {
+			position: absolute;
+			background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+			border: none;
+			padding: 0.6rem 1rem;
+			border-radius: 15px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+			cursor: pointer;
+		}
 
-    .table th,
-    .table td {
-    padding: 0.8rem 1rem;
-    text-align: center;
-    border: none;
-    }
+			.filter-button:hover {
+				background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+				transform: translateY(-2px);
+				box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+			}
+		/* Filter Menu */
+		.filter-menu {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 300px;
+			height: 100%;
+			background: rgba(230, 200, 160, 0.9);
+			border-radius: 0 15px 15px 0;
+			box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+			backdrop-filter: blur(10px);
+			z-index: 10;
+			transform: translateX(-100%);
+			transition: transform 0.3s ease-in-out;
+			overflow-y: auto;
+			padding: 1.5rem;
+		}
 
-    .table tbody tr {
-    position: relative;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    }
+			.filter-menu.active {
+				transform: translateX(0);
+			}
+		/* Close Button */
+		.close-button {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			background: none;
+			border: none;
+			font-size: 1.5rem;
+			cursor: pointer;
+			color: #343a40;
+		}
+		/* Filter Form */
+		.filter-form {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
 
-    .table tbody tr:last-child {
-    border-bottom: none;
-    }
+			.filter-form label {
+				font-weight: 600;
+				color: #343a40;
+			}
 
-    .table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(142, 167, 233, 0.3);
-    }
+			.filter-form select,
+			.filter-form input {
+				background: rgba(255, 255, 255, 0.2);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				border-radius: 8px;
+				padding: 0.6rem 1rem;
+				color: #343a40;
+				transition: all 0.3s ease;
+			}
 
-    .table thead {
-    background: rgba(255, 255, 255, 0.2);
-    color: #343a40;
-    font-weight: bold;
-    }
+				.filter-form input[type="range"] {
+					height: 10px;
+					background: rgba(255, 255, 255, 0.1);
+					border-radius: 5px;
+					outline: none;
+				}
 
-    .table tbody tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.05);
-    }
+			.filter-form button {
+				background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+				border: none;
+				padding: 0.6rem 1rem;
+				border-radius: 15px;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+				cursor: pointer;
+			}
 
-    .table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.1);
-    }
+				.filter-form button:hover {
+					background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+					transform: translateY(-2px);
+					box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+				}
+		/* Table styling */
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 1rem;
+			background: rgba(255, 255, 255, 0.15);
+			border-radius: 10px;
+			overflow: hidden;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+		}
 
-    .btn-primary {
-    background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
-    border: none;
-    padding: 0.4rem 1rem; /* Reduced padding */
-    border-radius: 15px; /* Smaller radius */
-    font-size: 14px; /* Smaller text */
-    margin: 0.2rem 0; /* Vertical spacing between buttons */
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(142, 167, 233, 0.2);
-    font-weight: 500;
-    width: 100%; /* Full-width buttons */
-    }
+			.table th,
+			.table td {
+				padding: 0.8rem 1rem;
+				text-align: center;
+				border: none;
+			}
 
-    .btn-primary:hover {
-    background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(142, 167, 233, 0.3);
-    }
-    /* Page background styling */
-    body {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    }
-</style>
+			.table tbody tr {
+				position: relative;
+				border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+				transition: all 0.3s ease;
+			}
+
+				.table tbody tr:last-child {
+					border-bottom: none;
+				}
+
+				.table tbody tr:hover {
+					background: rgba(255, 255, 255, 0.1);
+					border-color: rgba(142, 167, 233, 0.3);
+				}
+
+			.table thead {
+				background: rgba(255, 255, 255, 0.2);
+				color: #343a40;
+				font-weight: bold;
+			}
+
+			.table tbody tr:nth-child(even) {
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.table tbody tr:hover {
+				background: rgba(255, 255, 255, 0.1);
+			}
+
+		.btn-primary {
+			background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+			border: none;
+			padding: 0.4rem 1rem; /* Reduced padding */
+			border-radius: 15px; /* Smaller radius */
+			font-size: 14px; /* Smaller text */
+			margin: 0.2rem 0; /* Vertical spacing between buttons */
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 5px rgba(142, 167, 233, 0.2);
+			font-weight: 500;
+			width: 100%; /* Full-width buttons */
+		}
+
+			.btn-primary:hover {
+				background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+				transform: translateY(-1px);
+				box-shadow: 0 3px 8px rgba(142, 167, 233, 0.3);
+			}
+		/* Page background styling */
+		body {
+			background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+			min-height: 100vh;
+			font-family: 'Inter', sans-serif;
+		}
+	</style>
 <div class="container">
-    <!-- Filter Button -->
-    <button id="filterButton" class="filter-button">Filter</button>
-    <h1 class="big-title">HORSES</h1>
-    <p style="text-align: center;">
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
-        }
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Number</th>
-                <th>Breed</th>
-                <th>Year of Birth</th>
-                <th>Gender</th>
-                <th>Height</th>
-                <th>Price</th>
-                <th>Photo</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Number)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Breed.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.BirhtYear.Year)</td> <!-- Corrected from BirhtYear -->
-                    <td>@Html.DisplayFor(modelItem => item.Gender)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Height)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(item.PhotoPath))
-                        {
-                            var imagePaths = item.PhotoPath.Split(',');
-                            <img src="@imagePaths.First()" style="width: 100px; height: auto;" />
-                        }
-                    </td>
-                    <td>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
-                        }
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<!-- Filter Button -->
+	<button id="filterButton" class="filter-button top: 1rem;left: 1rem" ;>
+		Filter
+	</button>
+	<!-- Toggle View Button -->
+	<button id="toggleViewButton" class="filter-button" style="position: absolute; top: 1rem; right: 1rem;">Block View</button>
+	<h1 class="big-title">HORSES</h1>
+	<p style="text-align: center;">
+		@if (User.IsInRole("Admin"))
+		{
+			<a asp-action="Create" class="btn btn-primary">Create New</a>
+		}
+	</p>
+	<!-- List View -->
+	<div id="listView">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Number</th>
+					<th>Breed</th>
+					<th>Year of Birth</th>
+					<th>Gender</th>
+					<th>Height</th>
+					<th>Price</th>
+					<th>Photo</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@Html.DisplayFor(modelItem => item.Number)</td>
+						<td>@Html.DisplayFor(modelItem => item.Breed.Name)</td>
+						<td>@Html.DisplayFor(modelItem => item.BirhtYear.Year)</td>
+						<td>@Html.DisplayFor(modelItem => item.Gender)</td>
+						<td>@Html.DisplayFor(modelItem => item.Height)</td>
+						<td>@Html.DisplayFor(modelItem => item.Price)</td>
+						<td>
+							@if (!string.IsNullOrEmpty(item.PhotoPath))
+							{
+								var imagePaths = item.PhotoPath.Split(',');
+								<img src="@imagePaths.First()" style="width: 100px; height: auto;" />
+							}
+						</td>
+						<td>
+							@if (User.IsInRole("Admin"))
+							{
+								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+							}
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<!-- Block View -->
+	<div id="blockView" style="display: none;">
+		<div id="paginationContainer"></div>
+		<div id="blockContent" class="block-container"></div>
+	</div>
 </div>
 <!-- Filter Menu -->
 <div id="filterMenu" class="filter-menu">
-    <button id="closeFilterButton" class="close-button">&times;</button>
-    <h2 style="text-align: center; color: #343a40;">Filter Options</h2>
-    <form class="filter-form" id="filterForm">
-        <label for="breedFilter">Breed</label>
-        <select id="breedFilter" name="breedFilter">
-            <option value="">All Breeds</option>
-            @foreach (var breed in ViewBag.Breeds)
-            {
-                <option value="@breed.Value">@breed.Text</option> <!-- Corrected from @breed -->
-            }
-        </select>
-        <label for="birthYearFilter">Year of Birth</label>
-        <input type="number" id="birthYearFilter" name="birthYearFilter" placeholder="Enter year" />
-        <label for="genderFilter">Gender</label>
-        <select id="genderFilter" name="genderFilter">
-            <option value="">All Genders</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-        <label for="heightFilter">Height</label>
-        <input type="range" id="heightFilter" name="heightFilter" min="100" max="200" value="150" />
-        <span id="heightValue">150 cm</span>
-        <label for="priceFilter">Price</label>
-        <input type="range" id="priceFilter" name="priceFilter" min="0" max="10000" value="5000" />
-        <span id="priceValue">$5000</span>
-        <button type="button" id="applyFilters">Apply Filters</button>
-    </form>
+	<button id="closeFilterButton" class="close-button">&times;</button>
+	<h2 style="text-align: center; color: #343a40;">Filter Options</h2>
+	<form class="filter-form" id="filterForm">
+		<label for="searchFilter">Search</label>
+		<input type="text" id="searchFilter" name="searchFilter" placeholder="Search horses..." />
+
+		<label for="breedFilter">Breed</label>
+		<select id="breedFilter" name="breedFilter">
+			<option value="">All Breeds</option>
+			@foreach (var breed in ViewBag.Breeds)
+			{
+				<option value="@breed.Value">@breed.Text</option>
+			}
+		</select>
+
+		<label for="genderFilter">Gender</label>
+		<select id="genderFilter" name="genderFilter">
+			<option value="">All Genders</option>
+			<option value="Male">Male</option>
+			<option value="Female">Female</option>
+		</select>
+
+		<!-- Birth Year Range -->
+		<label for="birthYearMinFilter">Birth Year (Min)</label>
+		<input type="range" id="birthYearMinFilter" name="birthYearMinFilter" min="1900" max="2023" value="1900" />
+		<span id="birthYearMinValue">1900</span>
+
+		<label for="birthYearMaxFilter">Birth Year (Max)</label>
+		<input type="range" id="birthYearMaxFilter" name="birthYearMaxFilter" min="1900" max="2023" value="2023" />
+		<span id="birthYearMaxValue">2023</span>
+
+		<!-- Height Range -->
+		<label for="heightMinFilter">Height (Min)</label>
+		<input type="range" id="heightMinFilter" name="heightMinFilter" min="100" max="200" value="100" />
+		<span id="heightMinValue">100 cm</span>
+		<label for="heightMaxFilter">Height (Max)</label>
+		<input type="range" id="heightMaxFilter" name="heightMaxFilter" min="100" max="200" value="200" />
+		<span id="heightMaxValue">200 cm</span>
+
+		<!-- Price Range -->
+		<label for="priceMinFilter">Price (Min)</label>
+		<input type="range" id="priceMinFilter" name="priceMinFilter" min="0" max="10000" value="0" />
+		<span id="priceMinValue">$0</span>
+		<label for="priceMaxFilter">Price (Max)</label>
+		<input type="range" id="priceMaxFilter" name="priceMaxFilter" min="0" max="10000" value="10000" />
+		<span id="priceMaxValue">$10000</span>
+
+		<button type="button" id="applyFilters">Apply Filters</button>
+	</form>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const filterButton = document.getElementById("filterButton");
-        const closeFilterButton = document.getElementById("closeFilterButton");
-        const filterMenu = document.getElementById("filterMenu");
-        const heightFilter = document.getElementById("heightFilter");
-        const priceFilter = document.getElementById("priceFilter");
-        const heightValue = document.getElementById("heightValue");
-        const priceValue = document.getElementById("priceValue");
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		const filterButton = document.getElementById("filterButton");
+		const closeFilterButton = document.getElementById("closeFilterButton");
+		const filterMenu = document.getElementById("filterMenu");
+		const listView = document.getElementById("listView");
+		const blockView = document.getElementById("blockView");
+		const toggleViewButton = document.getElementById("toggleViewButton");
+		const applyFiltersButton = document.getElementById("applyFilters");
 
-        // Toggle filter menu visibility
-        filterButton.addEventListener("click", () => {
-            filterMenu.classList.add("active");
-        });
+		// Extract horse data from Razor Model
+		const horses = [
+	@foreach (var item in Model)
+	{
+		<text>
+					{
+						id: "@item.Id",
+						number: "@item.Number",
+						breed: "@item.Breed.Name",
+						birthYear: "@item.BirhtYear.Year",
+						gender: "@item.Gender",
+						height: "@item.Height",
+						price: "@item.Price",
+						photo: "@(string.IsNullOrEmpty(item.PhotoPath) ? "" : item.PhotoPath.Split(',')[0])"
+					},
+		</text>
+	}
+		];
 
-        closeFilterButton.addEventListener("click", () => {
-            filterMenu.classList.remove("active");
-        });
+		let isListView = true;
 
-        // Update height and price values dynamically
-        heightFilter.addEventListener("input", () => {
-            heightValue.textContent = `${heightFilter.value} cm`;
-        });
+		// Toggle filter menu visibility
+		filterButton.addEventListener("click", () => {
+			filterMenu.classList.toggle("active");
+		});
 
-        priceFilter.addEventListener("input", () => {
-            priceValue.textContent = `$${priceFilter.value}`;
-        });
+		closeFilterButton.addEventListener("click", () => {
+			filterMenu.classList.remove("active");
+		});
 
-        // Handle filter application
-        document.getElementById("applyFilters").addEventListener("click", () => {
-            const breedFilter = document.getElementById("breedFilter").value;
-            const birthYearFilter = document.getElementById("birthYearFilter").value;
-            const genderFilter = document.getElementById("genderFilter").value;
-            const heightFilterValue = heightFilter.value;
-            const priceFilterValue = priceFilter.value;
+		// Close filter menu when clicking outside
+		document.addEventListener("click", (event) => {
+			if (!filterMenu.contains(event.target) && !filterButton.contains(event.target)) {
+				filterMenu.classList.remove("active");
+			}
+		});
 
-            // Construct query parameters for filtering
-            const queryParams = new URLSearchParams();
-            if (breedFilter) queryParams.append("breed", breedFilter);
-            if (birthYearFilter) queryParams.append("birthYear", birthYearFilter);
-            if (genderFilter) queryParams.append("gender", genderFilter);
-            queryParams.append("height", heightFilterValue);
-            queryParams.append("price", priceFilterValue);
+		// Toggle between List View and Block View
+		toggleViewButton.addEventListener("click", () => {
+			if (isListView) {
+				listView.style.display = "none";
+				blockView.style.display = "block";
+				toggleViewButton.textContent = "List View";
+				loadBlockView(horses);
+			} else {
+				listView.style.display = "block";
+				blockView.style.display = "none";
+				toggleViewButton.textContent = "Block View";
+			}
+			isListView = !isListView;
+		});
 
-            // Redirect to the filtered page
-            window.location.href = `/Horse?${queryParams.toString()}`; // Corrected from /Horses to /Horse
-        });
-    });
-</script>
+		// Load Block View
+		function loadBlockView(filteredHorses) {
+			const blockContent = document.getElementById("blockContent");
+			blockContent.innerHTML = ""; // Clear existing content
+
+			filteredHorses.forEach((horse) => {
+				const block = document.createElement("div");
+				block.className = "block-item";
+
+				block.innerHTML = `
+					<img src="${horse.photo || 'https://via.placeholder.com/300'}" alt="${horse.number}">
+					<div class="number">${horse.number}</div>
+					<div class="breed">${horse.breed}</div>
+				`;
+
+				blockContent.appendChild(block);
+			});
+		}
+
+		// Apply Filters Logic
+		applyFiltersButton.addEventListener("click", () => {
+			const searchFilter = document.getElementById("searchFilter").value.toLowerCase();
+			const breedFilter = document.getElementById("breedFilter").value;
+			const genderFilter = document.getElementById("genderFilter").value;
+
+			// Get min and max values for birth year, height, and price
+			const birthYearMinFilter = parseInt(document.getElementById("birthYearMinFilter").value) || 0;
+			const birthYearMaxFilter = parseInt(document.getElementById("birthYearMaxFilter").value) || Infinity;
+			const heightMinFilter = parseInt(document.getElementById("heightMinFilter").value) || 0;
+			const heightMaxFilter = parseInt(document.getElementById("heightMaxFilter").value) || Infinity;
+			const priceMinFilter = parseInt(document.getElementById("priceMinFilter").value) || 0;
+			const priceMaxFilter = parseInt(document.getElementById("priceMaxFilter").value) || Infinity;
+
+			// Filter horses based on selected criteria
+			const filteredHorses = horses.filter((horse) => {
+				// Apply search filter
+				if (searchFilter && !horse.breed.toLowerCase().includes(searchFilter)) {
+					return false;
+				}
+
+				// Apply breed filter
+				if (breedFilter && horse.breed !== breedFilter) {
+					return false;
+				}
+
+				// Apply gender filter
+				if (genderFilter && horse.gender !== genderFilter) {
+					return false;
+				}
+
+				// Apply birth year range filter
+				const birthYear = parseInt(horse.birthYear);
+				if (birthYear < birthYearMinFilter || birthYear > birthYearMaxFilter) {
+					return false;
+				}
+
+				// Apply height range filter
+				const height = parseInt(horse.height);
+				if (height < heightMinFilter || height > heightMaxFilter) {
+					return false;
+				}
+
+				// Apply price range filter
+				const price = parseInt(horse.price);
+				if (price < priceMinFilter || price > priceMaxFilter) {
+					return false;
+				}
+
+				return true;
+			});
+
+			// Update the view with filtered data
+			if (isListView) {
+				updateListView(filteredHorses);
+			} else {
+				updateBlockView(filteredHorses);
+			}
+
+			// Close the filter menu after applying filters
+			filterMenu.classList.remove("active");
+		});
+
+		// Update List View with filtered data
+		function updateListView(filteredHorses) {
+			const tableBody = listView.querySelector("tbody");
+			tableBody.innerHTML = ""; // Clear existing rows
+
+			filteredHorses.forEach((horse) => {
+				const row = document.createElement("tr");
+				const isAdmin = @User.IsInRole("Admin").ToString().ToLower(); // Pass user role from Razor
+				const actionsHtml = isAdmin
+					? `
+						<a href="/Horse/Edit/${horse.id}" class="btn btn-primary">Edit</a>
+						<a href="/Horse/Delete/${horse.id}" class="btn btn-primary">Delete</a>
+						<a href="/Horse/Details/${horse.id}" class="btn btn-primary">Details</a>
+					`
+					: `
+						<a href="/Horse/Details/${horse.id}" class="btn btn-primary">Details</a>
+					`;
+
+				row.innerHTML = `
+					<td>${horse.number}</td>
+					<td>${horse.breed}</td>
+					<td>${horse.birthYear}</td>
+					<td>${horse.gender}</td>
+					<td>${horse.height}</td>
+					<td>$${horse.price}</td>
+					<td><img src="${horse.photo || 'https://via.placeholder.com/300'}" style="width: 100px; height: auto;" /></td>
+					<td>${actionsHtml}</td>
+				`;
+
+				tableBody.appendChild(row);
+			});
+		}
+
+		// Update Block View with filtered data
+		function updateBlockView(filteredHorses) {
+			const blockContent = document.getElementById("blockContent");
+			blockContent.innerHTML = ""; // Clear existing blocks
+
+			filteredHorses.forEach((horse) => {
+				const block = document.createElement("div");
+				block.className = "block-item";
+
+				block.innerHTML = `
+					<img src="${horse.photo || 'https://via.placeholder.com/300'}" alt="${horse.number}">
+					<div class="number">${horse.number}</div>
+					<div class="breed">${horse.breed}</div>
+				`;
+
+				blockContent.appendChild(block);
+			});
+		}
+
+		// Dynamic Value Indicators for Range Inputs
+			// Dynamic Value Indicators for Birth Year Range Inputs
+	document.getElementById("birthYearMinFilter").addEventListener("input", (e) => {
+		document.getElementById("birthYearMinValue").textContent = e.target.value;
+	});
+
+	document.getElementById("birthYearMaxFilter").addEventListener("input", (e) => {
+		document.getElementById("birthYearMaxValue").textContent = e.target.value;
+	});
+
+		document.getElementById("heightMinFilter").addEventListener("input", (e) => {
+			document.getElementById("heightMinValue").textContent = `${e.target.value} cm`;
+		});
+
+		document.getElementById("heightMaxFilter").addEventListener("input", (e) => {
+			document.getElementById("heightMaxValue").textContent = `${e.target.value} cm`;
+		});
+
+		document.getElementById("priceMinFilter").addEventListener("input", (e) => {
+			document.getElementById("priceMinValue").textContent = `$${e.target.value}`;
+		});
+
+		document.getElementById("priceMaxFilter").addEventListener("input", (e) => {
+			document.getElementById("priceMaxValue").textContent = `$${e.target.value}`;
+		});
+	});
+	</script>
