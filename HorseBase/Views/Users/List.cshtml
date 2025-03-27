@@ -5,94 +5,183 @@
 }
 
 <style>
-    /* Consistent container styling */
-    .container {
-        background: rgb(230, 200, 160);
-        border-radius: 15px;
-        padding: 1.5rem;
-        max-width: 1200px;
-        margin: 2rem auto;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(10px);
-        max-height: 85vh; /* Enable vertical scrolling */
-        overflow-y: auto; /* Add vertical scrollbar when needed */
-        scrollbar-color: #8ea7e9 #f8f9fa; /* Custom scrollbar colors */
-        scrollbar-width: thin; /* Thin scrollbar for modern browsers */
-        position: relative;
-        z-index: 2;
+    /* Base page styling */
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
     }
 
-        /* Scrollbar styling for Webkit browsers */
-        .container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .container::-webkit-scrollbar-track {
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .container::-webkit-scrollbar-thumb {
-            background: #8ea7e9;
-            border-radius: 10px;
-        }
-
     .big-title {
-        font-size: 24px;
-        font-weight: bold;
         text-align: center;
         margin-bottom: 1.5rem;
         color: #343a40;
     }
 
+    /* Container styling */
+    .container {
+        background: rgb(230, 200, 160);
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Back button styling */
+    .back-button {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+        cursor: pointer;
+    }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+        }
+
+    /* Search bar styling */
+    .search-bar {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+        .search-bar input[type="text"] {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            color: #343a40;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+            .search-bar input[type="text"]:focus {
+                background: rgba(255, 255, 255, 0.3);
+                border-color: #8ea7e9;
+                outline: none;
+            }
+
     /* Table styling */
     .table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 1.5rem;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
+        margin-top: 1rem;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
         overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
         .table th,
         .table td {
-            padding: 0.8rem;
+            padding: 0.8rem 1rem;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #343a40;
+            border: none;
         }
 
-        .table th {
+        .table thead {
             background: rgba(255, 255, 255, 0.2);
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .table tbody tr {
+            position: relative;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: rgba(142, 167, 233, 0.3);
+            }
+
+            .table tbody tr:nth-child(even) {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+    /* Pagination styling */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+        gap: 0.5rem;
+    }
+
+        .pagination button {
+            background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
             font-weight: 600;
-            color: #6c757d;
-        }
-
-        .table tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .table tr:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Checkbox styling */
-        .table input[type="checkbox"] {
-            transform: scale(1.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
             cursor: pointer;
-            accent-color: #8ea7e9;
         }
 
-    /* Button styling */
+            .pagination button:hover {
+                background: linear-gradient(135deg, rgba(142, 167, 233, 0.9), rgba(187, 209, 253, 0.9));
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+            }
+
+            .pagination button.active {
+                background: linear-gradient(135deg, rgba(142, 167, 233, 1), rgba(187, 209, 253, 1));
+                font-weight: bold;
+            }
+
+    /* Form controls */
+    .form-group {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .form-select {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        color: #343a40;
+        width: 120px;
+        transition: all 0.3s ease;
+    }
+
+        .form-select:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #8ea7e9;
+            outline: none;
+        }
+
+    /* Buttons */
     .btn-primary {
         background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
         border: none;
-        padding: 0.6rem 2rem;
-        border-radius: 25px;
+        padding: 0.6rem 1.5rem;
+        border-radius: 15px;
         font-weight: 600;
+        color: #fff;
         transition: all 0.3s ease;
         box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+        cursor: pointer;
         width: 100%;
     }
 
@@ -104,9 +193,27 @@
 </style>
 
 <div class="container">
+    <!-- Back button -->
+    <a href="/" class="back-button">Back to Home</a>
+
     <h1 class="big-title">USER LIST</h1>
 
+    <!-- Search bar -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search by name or email..." />
+    </div>
+
     <form method="post" action="@Url.Action("UpdateStatus", "Users")">
+        <!-- Items per page selector -->
+        <div class="form-group">
+            <select id="itemsPerPage" class="form-select">
+                <option value="4">4 per page</option>
+                <option value="6">6 per page</option>
+                <option value="8" selected>8 per page</option>
+            </select>
+        </div>
+
+        <!-- User table -->
         <table class="table">
             <thead>
                 <tr>
@@ -119,17 +226,18 @@
                     <th>Roles</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="userTableBody">
                 @foreach (var user in Model)
                 {
-                    <tr>
+                    // FIX: Use @ before MiddleName, LastName, and Email in interpolation
+                    <tr data-search="@($"{user.FirstName} {@user.MiddleName} {@user.LastName} {@user.Email}".ToLower())">
                         <td>@user.UserName</td>
                         <td>@user.Email</td>
                         <td>@user.FirstName</td>
                         <td>@user.MiddleName</td>
                         <td>@user.LastName</td>
                         <td>
-                            <input type="checkbox" name="isActive_@user.Id" @(user.IsActive ? "checked" : "") />
+                            <input type="checkbox" name="isActive_@user.Id" @(user.IsActive ? "checked" : "") style="transform: scale(1.5); margin: auto;" />
                         </td>
                         <td>@string.Join(", ", user.Roles)</td>
                     </tr>
@@ -137,9 +245,79 @@
             </tbody>
         </table>
 
-        <!-- Submit Button -->
+        <!-- Pagination -->
+        <div class="form-group">
+            <div id="pagination" class="pagination"></div>
+        </div>
+
+        <!-- Save button -->
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const itemsPerPageSelect = document.getElementById('itemsPerPage');
+        const paginationContainer = document.getElementById('pagination');
+        const tableRows = document.querySelectorAll("#userTableBody tr");
+
+        let currentPage = 1;
+        let itemsPerPage = parseInt(itemsPerPageSelect.value);
+        let filteredRows = Array.from(tableRows);
+        let totalFiltered = filteredRows.length;
+
+        function updatePagination() {
+            paginationContainer.innerHTML = '';
+
+            const totalPages = Math.ceil(totalFiltered / itemsPerPage);
+
+            // Create page buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = i === currentPage ? 'active' : '';
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    updatePage();
+                    updatePagination();
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        function updatePage() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+
+            filteredRows.forEach(row => row.style.display = 'none');
+            filteredRows.slice(start, end).forEach(row => row.style.display = '');
+        }
+
+        itemsPerPageSelect.addEventListener('change', (e) => {
+            itemsPerPage = parseInt(e.target.value);
+            currentPage = 1; 
+            updatePagination();
+            updatePage();
+        });
+
+        searchInput.addEventListener("input", function () {
+            const searchTerm = searchInput.value.toLowerCase();
+            filteredRows = Array.from(tableRows).filter(row => {
+                const data = row.getAttribute('data-search');
+                console.log(`Searching in: ${data}`); // Debug line
+                return data.includes(searchTerm);
+            });
+            totalFiltered = filteredRows.length;
+            currentPage = 1; // Reset to first page
+            updatePagination();
+            updatePage();
+        });
+
+        // Initialize
+        updatePagination();
+        updatePage();
+    });
+</script>

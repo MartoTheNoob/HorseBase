@@ -74,7 +74,7 @@ namespace HorseBase.Controllers
                         if (!user.IsActive)
                         {
                             // If the user is inactive, redirect to the No Access page
-                            return RedirectToAction("NoAccess", "Home");
+                            return RedirectToAction("NoAccess", "Users");
                         }
 
                         // Otherwise, sign in the user

@@ -127,11 +127,13 @@
     /* Smooth transition for image changes */
     .photo-preview {
         width: 100%; /* Make the image responsive */
+        max-width: 100px; /* Set a maximum width of 300px */
         height: auto; /* Maintain aspect ratio */
         border-radius: 8px;
         position: absolute; /* Stack images on top of each other */
         top: 0;
-        left: 0;
+        left: 50%; /* Center the image horizontally */
+        transform: translateX(-50%); /* Adjust for perfect centering */
         opacity: 0; /* Start with invisible images */
         transition: opacity 0.8s ease-in-out; /* Smooth fade effect */
         z-index: 1; /* Ensure images stack properly */
@@ -225,7 +227,10 @@
     </dl>
 
     <div class="button-group">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        }
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
         <a asp-controller="Reservation" asp-action="Create" asp-route-horseId="@Model.Id" class="btn btn-primary">Reserve</a>
     </div>

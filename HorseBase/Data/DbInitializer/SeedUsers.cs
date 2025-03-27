@@ -28,6 +28,7 @@ namespace HorseBase.Data.DbInitializer
                 FirstName = "Admin",
                 MiddleName = "Adminov",
                 LastName = "Adminchov",
+                IsActive = true
             };
 
             var result = await userManager.CreateAsync(admin, "123%Ab");

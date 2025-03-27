@@ -254,34 +254,66 @@
 			min-height: 100vh;
 			font-family: 'Inter', sans-serif;
 		}
+
+	.pagination {
+		display: flex;
+		justify-content: center;
+		margin-top: 1rem;
+		gap: 0.5rem;
+	}
+
+		.pagination button {
+			background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+			border: none;
+			padding: 0.5rem 1rem;
+			border-radius: 15px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
+			cursor: pointer;
+		}
+
+			.pagination button:hover {
+				background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
+				transform: translateY(-2px);
+				box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
+			}
+
+			.pagination button.active {
+				background: linear-gradient(135deg, rgba(142, 167, 233, 1), rgba(187, 209, 253, 1));
+				font-weight: bold;
+			}
+
 	</style>
 <div class="container">
-	<!-- Filter Button -->
+	<!-- Бутон за филтриране -->
 	<button id="filterButton" class="filter-button top: 1rem;left: 1rem" ;>
-		Filter
+		Филтър
 	</button>
-	<!-- Toggle View Button -->
-	<button id="toggleViewButton" class="filter-button" style="position: absolute; top: 1rem; right: 1rem;">Block View</button>
-	<h1 class="big-title">HORSES</h1>
+	<!-- Бутон за превключване на изгледа -->
+	<button id="toggleViewButton" class="filter-button" style="position: absolute; top: 1rem; right: 1rem;">
+		Блоков изглед
+	</button>
+	<h1 class="big-title">КОНЕ</h1>
 	<p style="text-align: center;">
 		@if (User.IsInRole("Admin"))
 		{
-			<a asp-action="Create" class="btn btn-primary">Create New</a>
+			<a asp-action="Create" class="btn btn-primary">Създай нов</a>
 		}
 	</p>
-	<!-- List View -->
+	<!-- Изглед на списък -->
 	<div id="listView">
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Number</th>
-					<th>Breed</th>
-					<th>Year of Birth</th>
-					<th>Gender</th>
-					<th>Height</th>
-					<th>Price</th>
-					<th>Photo</th>
-					<th>Actions</th>
+					<th>Номер</th>
+					<th>Порода</th>
+					<th>Година на раждане</th>
+					<th>Пол</th>
+					<th>Височина</th>
+					<th>Цена</th>
+					<th>Снимка</th>
+					<th>Действия</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -302,82 +334,90 @@
 							}
 							else
 							{
-								<img src="~/images/horse_profile.jpg" style="width: 100px; height: auto;" alt="Default Horse Image" />
+								<img src="~/images/horse_profile.jpg" style="width: 100px; height: auto;" alt="Стандартна снимка на кон" />
 							}
 						</td>
 						<td>
 							@if (User.IsInRole("Admin"))
 							{
-								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Редактирай</a>
+								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Изтрий</a>
 							}
-							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Детайли</a>
 						</td>
 					</tr>
 				}
 			</tbody>
 		</table>
 	</div>
-	<!-- Block View -->
+	<!-- Блоков изглед -->
 	<div id="blockView" style="display: none;">
-		<div id="paginationContainer"></div>
+		<div id="paginationContainer" class="pagination"></div>
 		<div id="blockContent" class="block-container"></div>
 	</div>
 </div>
-<!-- Filter Menu -->
+<!-- Меню за филтриране -->
 <div id="filterMenu" class="filter-menu">
 	<button id="closeFilterButton" class="close-button">&times;</button>
-	<h2 style="text-align: center; color: #343a40;">Filter Options</h2>
+	<h2 style="text-align: center; color: #343a40;">Опции за филтриране</h2>
 	<form class="filter-form" id="filterForm">
-		<label for="searchFilter">Search</label>
-		<input type="text" id="searchFilter" name="searchFilter" placeholder="Search horses..." />
 
-		<label for="breedFilter">Breed</label>
+		<label for="breedFilter">Порода</label>
 		<select id="breedFilter" name="breedFilter">
-			<option value="">All Breeds</option>
+			<option value="">Всички породи</option>
 			@foreach (var breed in ViewBag.Breeds)
 			{
 				<option value="@breed.Value">@breed.Text</option>
 			}
 		</select>
 
-		<label for="genderFilter">Gender</label>
+		<label for="genderFilter">Пол</label>
 		<select id="genderFilter" name="genderFilter">
-			<option value="">All Genders</option>
-			<option value="Male">Male</option>
-			<option value="Female">Female</option>
+			<option value="">Всички полове</option>
+			<option value="Male">Мъжки</option>
+			<option value="Female">Женски</option>
 		</select>
 
-		<!-- Birth Year Range -->
-		<label for="birthYearMinFilter">Birth Year (Min)</label>
+		<!-- Обхват на годината на раждане -->
+		<label for="birthYearMinFilter">Година на раждане (Мин)</label>
 		<input type="range" id="birthYearMinFilter" name="birthYearMinFilter" min="1900" max="2023" value="1900" />
 		<span id="birthYearMinValue">1900</span>
 
-		<label for="birthYearMaxFilter">Birth Year (Max)</label>
+		<label for="birthYearMaxFilter">Година на раждане (Макс)</label>
 		<input type="range" id="birthYearMaxFilter" name="birthYearMaxFilter" min="1900" max="2023" value="2023" />
 		<span id="birthYearMaxValue">2023</span>
 
-		<!-- Height Range -->
-		<label for="heightMinFilter">Height (Min)</label>
+		<!-- Обхват на височината -->
+		<label for="heightMinFilter">Височина (Мин)</label>
 		<input type="range" id="heightMinFilter" name="heightMinFilter" min="100" max="200" value="100" />
-		<span id="heightMinValue">100 cm</span>
-		<label for="heightMaxFilter">Height (Max)</label>
-		<input type="range" id="heightMaxFilter" name="heightMaxFilter" min="100" max="200" value="200" />
-		<span id="heightMaxValue">200 cm</span>
+		<span id="heightMinValue">100 см</span>
 
-		<!-- Price Range -->
-		<label for="priceMinFilter">Price (Min)</label>
+		<label for="heightMaxFilter">Височина (Макс)</label>
+		<input type="range" id="heightMaxFilter" name="heightMaxFilter" min="100" max="200" value="200" />
+		<span id="heightMaxValue">200 см</span>
+
+		<!-- Обхват на цената -->
+		<label for="priceMinFilter">Цена (Мин)</label>
 		<input type="range" id="priceMinFilter" name="priceMinFilter" min="0" max="10000" value="0" />
 		<span id="priceMinValue">$0</span>
-		<label for="priceMaxFilter">Price (Max)</label>
+
+		<label for="priceMaxFilter">Цена (Макс)</label>
 		<input type="range" id="priceMaxFilter" name="priceMaxFilter" min="0" max="10000" value="10000" />
 		<span id="priceMaxValue">$10000</span>
 
-		<button type="button" id="applyFilters">Apply Filters</button>
+		<button type="button" id="applyFilters">Приложи филтрите</button>
 	</form>
 </div>
+
 	<script>
-		document.addEventListener("DOMContentLoaded", function () {
+	document.addEventListener("DOMContentLoaded", function () {
+		// Global variables
+		let currentPage = 1;
+		const itemsPerPage = 5;
+		let filteredHorsesCache = null;
+		let isListView = true;
+
+		// DOM Elements
 		const filterButton = document.getElementById("filterButton");
 		const closeFilterButton = document.getElementById("closeFilterButton");
 		const filterMenu = document.getElementById("filterMenu");
@@ -393,19 +433,17 @@
 		<text>
 					{
 						id: "@item.Id",
-						number: "@item.Number",
-						breed: "@item.Breed.Name",
-						birthYear: "@item.BirhtYear.Year",
-						gender: "@item.Gender",
-						height: "@item.Height",
-						price: "@item.Price",
-						photo: "@(string.IsNullOrEmpty(item.PhotoPath) ? "" : item.PhotoPath.Split(',')[0])"
+					number: "@item.Number",
+					breed: "@item.Breed.Name",
+					birthYear: "@item.BirhtYear.Year",
+					gender: "@item.Gender",
+					height: "@item.Height",
+					price: "@item.Price",
+					photo: "@(string.IsNullOrEmpty(item.PhotoPath) ? "" : item.PhotoPath.Split(',')[0])"
 					},
 		</text>
 	}
 		];
-
-		let isListView = true;
 
 		// Toggle filter menu visibility
 		filterButton.addEventListener("click", () => {
@@ -428,114 +466,125 @@
 			if (isListView) {
 				listView.style.display = "none";
 				blockView.style.display = "block";
-				toggleViewButton.textContent = "List View";
-				loadBlockView(horses);
+				toggleViewButton.textContent = "Листов изглед";
+				const currentData = filteredHorsesCache || horses;
+				loadBlockView(currentData);
 			} else {
 				listView.style.display = "block";
 				blockView.style.display = "none";
-				toggleViewButton.textContent = "Block View";
+				toggleViewButton.textContent = "Блоков изглед";
 			}
 			isListView = !isListView;
 		});
 
-		// Load Block View
-	function loadBlockView(filteredHorses) {
-		const blockContent = document.getElementById("blockContent");
-		blockContent.innerHTML = ""; // Clear existing content
-		filteredHorses.forEach((horse) => {
-			const block = document.createElement("div");
-			block.className = "block-item";
-			block.innerHTML = `
-				<a href="/Horse/Details/${horse.id}" style="text-decoration: none; color: inherit;">
-					<img src="${horse.photo || '/images/horse_profile.jpg'}" alt="${horse.number}">
-					<div class="number">${horse.number}</div>
-					<div class="breed">${horse.breed}</div>
-				</a>
-			`;
-			blockContent.appendChild(block);
-		});
-	}
+		// Load Block View with Pagination
+		function loadBlockView(filteredHorses) {
+			const blockContent = document.getElementById("blockContent");
+			const paginationContainer = document.getElementById("paginationContainer");
+
+			// Clear existing content
+			blockContent.innerHTML = "";
+			paginationContainer.innerHTML = "";
+
+			// Calculate total pages
+			const totalPages = Math.ceil(filteredHorses.length / itemsPerPage);
+
+			// Get current page's horses
+			const startIndex = (currentPage - 1) * itemsPerPage;
+			const endIndex = startIndex + itemsPerPage;
+			const currentHorses = filteredHorses.slice(startIndex, endIndex);
+
+			// Render current page's horses
+			currentHorses.forEach((horse) => {
+				const block = document.createElement("div");
+				block.className = "block-item";
+				block.innerHTML = `
+					<a href="/Horse/Details/${horse.id}" style="text-decoration: none; color: inherit;">
+						<img src="${horse.photo || '/images/horse_profile.jpg'}" alt="${horse.number}">
+						<div class="number">${horse.number}</div>
+						<div class="breed">${horse.breed}</div>
+					</a>
+				`;
+				blockContent.appendChild(block);
+			});
+
+			// Render Pagination Buttons
+			for (let i = 1; i <= totalPages; i++) {
+				const pageButton = document.createElement("button");
+				pageButton.textContent = i;
+				pageButton.classList.add("pagination-button");
+
+				if (i === currentPage) {
+					pageButton.classList.add("active");
+				}
+
+				pageButton.addEventListener("click", () => {
+					currentPage = i;
+					loadBlockView(filteredHorses);
+				});
+
+				paginationContainer.appendChild(pageButton);
+			}
+		}
 
 		// Apply Filters Logic
 		applyFiltersButton.addEventListener("click", () => {
+			currentPage = 1; // Reset to first page
+
 			const searchFilter = document.getElementById("searchFilter").value.toLowerCase();
 			const breedFilter = document.getElementById("breedFilter").value;
 			const genderFilter = document.getElementById("genderFilter").value;
+			const birthYearMin = parseInt(document.getElementById("birthYearMinFilter").value) || 0;
+			const birthYearMax = parseInt(document.getElementById("birthYearMaxFilter").value) || Infinity;
+			const heightMin = parseInt(document.getElementById("heightMinFilter").value) || 0;
+			const heightMax = parseInt(document.getElementById("heightMaxFilter").value) || Infinity;
+			const priceMin = parseInt(document.getElementById("priceMinFilter").value) || 0;
+			const priceMax = parseInt(document.getElementById("priceMaxFilter").value) || Infinity;
 
-			// Get min and max values for birth year, height, and price
-			const birthYearMinFilter = parseInt(document.getElementById("birthYearMinFilter").value) || 0;
-			const birthYearMaxFilter = parseInt(document.getElementById("birthYearMaxFilter").value) || Infinity;
-			const heightMinFilter = parseInt(document.getElementById("heightMinFilter").value) || 0;
-			const heightMaxFilter = parseInt(document.getElementById("heightMaxFilter").value) || Infinity;
-			const priceMinFilter = parseInt(document.getElementById("priceMinFilter").value) || 0;
-			const priceMaxFilter = parseInt(document.getElementById("priceMaxFilter").value) || Infinity;
-
-			// Filter horses based on selected criteria
-			const filteredHorses = horses.filter((horse) => {
-				// Apply search filter
-				if (searchFilter && !horse.breed.toLowerCase().includes(searchFilter)) {
-					return false;
-				}
-
-				// Apply breed filter
-				if (breedFilter && horse.breed !== breedFilter) {
-					return false;
-				}
-
-				// Apply gender filter
-				if (genderFilter && horse.gender !== genderFilter) {
-					return false;
-				}
-
-				// Apply birth year range filter
+			const filteredHorses = horses.filter(horse => {
 				const birthYear = parseInt(horse.birthYear);
-				if (birthYear < birthYearMinFilter || birthYear > birthYearMaxFilter) {
-					return false;
-				}
-
-				// Apply height range filter
 				const height = parseInt(horse.height);
-				if (height < heightMinFilter || height > heightMaxFilter) {
-					return false;
-				}
-
-				// Apply price range filter
 				const price = parseInt(horse.price);
-				if (price < priceMinFilter || price > priceMaxFilter) {
-					return false;
-				}
 
-				return true;
+				return (
+					(searchFilter === "" || horse.breed.toLowerCase().includes(searchFilter)) &&
+					(breedFilter === "" || horse.breed === breedFilter) &&
+					(genderFilter === "" || horse.gender === genderFilter) &&
+					birthYear >= birthYearMin &&
+					birthYear <= birthYearMax &&
+					height >= heightMin &&
+					height <= heightMax &&
+					price >= priceMin &&
+					price <= priceMax
+				);
 			});
 
-			// Update the view with filtered data
+			filteredHorsesCache = filteredHorses;
+
 			if (isListView) {
 				updateListView(filteredHorses);
 			} else {
-				updateBlockView(filteredHorses);
+				loadBlockView(filteredHorses);
 			}
 
-			// Close the filter menu after applying filters
 			filterMenu.classList.remove("active");
 		});
 
 		// Update List View with filtered data
 		function updateListView(filteredHorses) {
 			const tableBody = listView.querySelector("tbody");
-			tableBody.innerHTML = ""; // Clear existing rows
+			tableBody.innerHTML = "";
 
-			filteredHorses.forEach((horse) => {
+			filteredHorses.forEach(horse => {
 				const row = document.createElement("tr");
-				const isAdmin = @User.IsInRole("Admin").ToString().ToLower(); // Pass user role from Razor
+				const isAdmin = @User.IsInRole("Admin").ToString().ToLower();
 				const actionsHtml = isAdmin
 					? `
 						<a href="/Horse/Edit/${horse.id}" class="btn btn-primary">Edit</a>
 						<a href="/Horse/Delete/${horse.id}" class="btn btn-primary">Delete</a>
 						<a href="/Horse/Details/${horse.id}" class="btn btn-primary">Details</a>
 					`
-					: `
-						<a href="/Horse/Details/${horse.id}" class="btn btn-primary">Details</a>
-					`;
+					: `<a href="/Horse/Details/${horse.id}" class="btn btn-primary">Details</a>`;
 
 				row.innerHTML = `
 					<td>${horse.number}</td>
@@ -544,7 +593,7 @@
 					<td>${horse.gender}</td>
 					<td>${horse.height}</td>
 					<td>$${horse.price}</td>
-					<td><img src="${horse.photo || 'https://via.placeholder.com/300'}" style="width: 100px; height: auto;" /></td>
+					<td><img src="${horse.photo || '/images/horse_profile.jpg'}" style="width: 100px; height: auto;" /></td>
 					<td>${actionsHtml}</td>
 				`;
 
@@ -552,33 +601,14 @@
 			});
 		}
 
-		// Update Block View with filtered data
-	function updateBlockView(filteredHorses) {
-		const blockContent = document.getElementById("blockContent");
-		blockContent.innerHTML = ""; // Clear existing blocks
-		filteredHorses.forEach((horse) => {
-			const block = document.createElement("div");
-			block.className = "block-item";
-			block.innerHTML = `
-				<a href="/Horse/Details/${horse.id}" style="text-decoration: none; color: inherit;">
-					<img src="${horse.photo || '/images/horse_profile.jpg'}" alt="${horse.number}">
-					<div class="number">${horse.number}</div>
-					<div class="breed">${horse.breed}</div>
-				</a>
-			`;
-			blockContent.appendChild(block);
+		// Range input value displays
+		document.getElementById("birthYearMinFilter").addEventListener("input", (e) => {
+			document.getElementById("birthYearMinValue").textContent = e.target.value;
 		});
-	}
 
-		// Dynamic Value Indicators for Range Inputs
-			// Dynamic Value Indicators for Birth Year Range Inputs
-	document.getElementById("birthYearMinFilter").addEventListener("input", (e) => {
-		document.getElementById("birthYearMinValue").textContent = e.target.value;
-	});
-
-	document.getElementById("birthYearMaxFilter").addEventListener("input", (e) => {
-		document.getElementById("birthYearMaxValue").textContent = e.target.value;
-	});
+		document.getElementById("birthYearMaxFilter").addEventListener("input", (e) => {
+			document.getElementById("birthYearMaxValue").textContent = e.target.value;
+		});
 
 		document.getElementById("heightMinFilter").addEventListener("input", (e) => {
 			document.getElementById("heightMinValue").textContent = `${e.target.value} cm`;
