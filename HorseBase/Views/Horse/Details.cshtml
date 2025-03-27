@@ -172,6 +172,7 @@
     <dl class="dl-details">
         <!-- Photo Preview -->
         <div>
+            <dt>Photo</dt>
             <dd>
                 @if (!string.IsNullOrEmpty(Model.PhotoPath))
                 {
@@ -189,6 +190,11 @@
                             <div class="photo-indicator @(i == 0 ? "active" : "")" data-index="@i"></div>
                         }
                     </div>
+                }
+                else
+                {
+                    <!-- Default Image -->
+                    <img src="/images/horse_profile.jpg" alt="Default Horse Image" style="width: 100%; height: auto; border-radius: 8px;" />
                 }
             </dd>
         </div>

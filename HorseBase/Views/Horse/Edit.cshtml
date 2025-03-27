@@ -1,9 +1,8 @@
-﻿@model Horse
-
+﻿@model HorseBase.Models.Horse
 @{
     ViewData["Title"] = "Edit";
+    var existingPhotos = ViewBag.ExistingPhotos as List<string> ?? new List<string>();
 }
-
 <style>
     /* Consistent container styling */
     .container {
@@ -21,7 +20,6 @@
         position: relative;
         z-index: 2;
     }
-
         /* Scrollbar styling for Webkit browsers */
         .container::-webkit-scrollbar {
             width: 8px;
@@ -44,7 +42,6 @@
         margin-bottom: 1.5rem;
         color: #343a40;
     }
-
     /* Form group styling */
     .form-group {
         margin-bottom: 1rem;
@@ -73,7 +70,6 @@
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
             outline: none;
         }
-
     /* Radio button styling */
     .radio-container {
         display: flex;
@@ -86,7 +82,6 @@
         .radio-container input[type="radio"] {
             margin-right: 0.5rem;
         }
-
     /* Primary button styling */
     .btn-primary {
         background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
@@ -104,7 +99,6 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
         }
-
     /* Secondary button styling */
     .btn-secondary {
         background: linear-gradient(135deg, #8ea7e9, #a8c0ff);
@@ -123,35 +117,30 @@
             box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
         }
 </style>
-
 <div class="container">
     <h1 class="big-title">EDIT HORSE</h1>
-
-    <form asp-action="Edit" class="d-flex flex-column">
+    <!-- Form to submit data, enctype="multipart/form-data" to allow file uploads -->
+    <form asp-action="Edit" enctype="multipart/form-data" class="d-flex flex-column">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-
         <!-- Number Field -->
         <div class="form-group">
             <label asp-for="Number" class="control-label"></label>
             <input asp-for="Number" class="form-control" />
             <span asp-validation-for="Number" class="text-danger"></span>
         </div>
-
         <!-- Breed Field -->
         <div class="form-group">
             <label asp-for="BreedId" class="control-label"></label>
             <select asp-for="BreedId" class="form-control" asp-items="ViewBag.BreedId"></select>
             <span asp-validation-for="BreedId" class="text-danger"></span>
         </div>
-
         <!-- Birth Year Field -->
         <div class="form-group">
             <label asp-for="BirhtYear" class="control-label"></label>
             <input asp-for="BirhtYear" class="form-control" />
             <span asp-validation-for="BirhtYear" class="text-danger"></span>
         </div>
-
         <!-- Gender Field -->
         <div class="form-group">
             <label class="control-label">Gender</label>
@@ -165,40 +154,43 @@
             </div>
             <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
-
         <!-- Height Field -->
         <div class="form-group">
             <label asp-for="Height" class="control-label"></label>
             <input asp-for="Height" class="form-control" />
             <span asp-validation-for="Height" class="text-danger"></span>
         </div>
-
         <!-- Price Field -->
         <div class="form-group">
             <label asp-for="Price" class="control-label"></label>
             <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
-
-        <!-- Photo Path Field -->
+        <!-- Photo Upload Field -->
+        <div class="form-group">
+            <label class="control-label">Existing Photos</label>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                @foreach (var photo in existingPhotos)
+                {
+                    <img src="@photo" style="width: 100px; height: auto;" />
+                }
+            </div>
+        </div>
         <div class="form-group">
             <label asp-for="PhotoPath" class="control-label"></label>
-            <input asp-for="PhotoPath" class="form-control" />
+            <input type="file" name="photos" multiple class="form-control" />
             <span asp-validation-for="PhotoPath" class="text-danger"></span>
         </div>
-
         <!-- Submit Button -->
         <div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary" />
         </div>
     </form>
-
     <!-- Back to List Button -->
     <div style="text-align: center; margin-top: 1rem;">
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

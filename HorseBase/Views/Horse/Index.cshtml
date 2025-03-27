@@ -300,6 +300,10 @@
 								var imagePaths = item.PhotoPath.Split(',');
 								<img src="@imagePaths.First()" style="width: 100px; height: auto;" />
 							}
+							else
+							{
+								<img src="~/images/horse_profile.jpg" style="width: 100px; height: auto;" alt="Default Horse Image" />
+							}
 						</td>
 						<td>
 							@if (User.IsInRole("Admin"))
@@ -435,23 +439,22 @@
 		});
 
 		// Load Block View
-		function loadBlockView(filteredHorses) {
-			const blockContent = document.getElementById("blockContent");
-			blockContent.innerHTML = ""; // Clear existing content
-
-			filteredHorses.forEach((horse) => {
-				const block = document.createElement("div");
-				block.className = "block-item";
-
-				block.innerHTML = `
-					<img src="${horse.photo || 'https://via.placeholder.com/300'}" alt="${horse.number}">
+	function loadBlockView(filteredHorses) {
+		const blockContent = document.getElementById("blockContent");
+		blockContent.innerHTML = ""; // Clear existing content
+		filteredHorses.forEach((horse) => {
+			const block = document.createElement("div");
+			block.className = "block-item";
+			block.innerHTML = `
+				<a href="/Horse/Details/${horse.id}" style="text-decoration: none; color: inherit;">
+					<img src="${horse.photo || '/images/horse_profile.jpg'}" alt="${horse.number}">
 					<div class="number">${horse.number}</div>
 					<div class="breed">${horse.breed}</div>
-				`;
-
-				blockContent.appendChild(block);
-			});
-		}
+				</a>
+			`;
+			blockContent.appendChild(block);
+		});
+	}
 
 		// Apply Filters Logic
 		applyFiltersButton.addEventListener("click", () => {
@@ -550,23 +553,22 @@
 		}
 
 		// Update Block View with filtered data
-		function updateBlockView(filteredHorses) {
-			const blockContent = document.getElementById("blockContent");
-			blockContent.innerHTML = ""; // Clear existing blocks
-
-			filteredHorses.forEach((horse) => {
-				const block = document.createElement("div");
-				block.className = "block-item";
-
-				block.innerHTML = `
-					<img src="${horse.photo || 'https://via.placeholder.com/300'}" alt="${horse.number}">
+	function updateBlockView(filteredHorses) {
+		const blockContent = document.getElementById("blockContent");
+		blockContent.innerHTML = ""; // Clear existing blocks
+		filteredHorses.forEach((horse) => {
+			const block = document.createElement("div");
+			block.className = "block-item";
+			block.innerHTML = `
+				<a href="/Horse/Details/${horse.id}" style="text-decoration: none; color: inherit;">
+					<img src="${horse.photo || '/images/horse_profile.jpg'}" alt="${horse.number}">
 					<div class="number">${horse.number}</div>
 					<div class="breed">${horse.breed}</div>
-				`;
-
-				blockContent.appendChild(block);
-			});
-		}
+				</a>
+			`;
+			blockContent.appendChild(block);
+		});
+	}
 
 		// Dynamic Value Indicators for Range Inputs
 			// Dynamic Value Indicators for Birth Year Range Inputs

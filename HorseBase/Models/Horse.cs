@@ -11,8 +11,7 @@ namespace HorseBase.Models
 
         public int BreedId { get; set; }
 
-        [Required, Display(Name = "Порода")]
-        public Breed Breed { get; set; }
+        public Breed? Breed { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d M yyyy}")]
