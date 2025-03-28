@@ -40,14 +40,33 @@ namespace HorseBase.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _context.Users.Where(x => x.UserName == User.Identity.Name).FirstOrDefaultAsync();
-                // Fetch horse details to calculate price
+                // Fetch the horse details
                 var horse = await _context.horses.FindAsync(reservationRequest.HorseId);
-
                 if (horse == null)
                 {
                     return NotFound();
                 }
+
+                // Check for overlapping reservations
+                bool isOverlapping = await _context.reservations.AnyAsync(r =>
+                    r.Horse.Id == reservationRequest.HorseId &&
+                    r.TakeHour < reservationRequest.ReturnHour &&
+                    r.ReturnHour > reservationRequest.TakeHour);
+
+                if (isOverlapping)
+                {
+                    ModelState.AddModelError("", "This horse is already booked for the selected time. Please choose another date.");
+                    return View(reservationRequest);
+                }
+
+                // Fetch the current user
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
+
+                // Create the reservation
                 Reservation reservation = new Reservation()
                 {
                     Horse = horse,
@@ -57,12 +76,25 @@ namespace HorseBase.Controllers
                     UserId = user.Id
                 };
 
+                // Save the reservation to the database
                 _context.reservations.Add(reservation);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Home");
             }
+
             return View(reservationRequest);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckOverlaps(int horseId, DateTime takeHour, DateTime returnHour)
+        {
+            bool isOverlapping = await _context.reservations.AnyAsync(r =>
+                r.Horse.Id == horseId &&
+                r.TakeHour < returnHour &&
+                r.ReturnHour > takeHour);
+
+            return Json(new { isOverlapping });
         }
 
     }

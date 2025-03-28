@@ -4,6 +4,7 @@ using HorseBase.Models.ViewModels.User;
 using HorseBase.Models;
 using HorseBase.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HorseBase.Controllers
 {
@@ -11,7 +12,7 @@ namespace HorseBase.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly  ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         public UsersController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -46,6 +47,7 @@ namespace HorseBase.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
+                ViewData["error"] = "Вече има потребител с тези данни.";
             }
             return View(userRegister);
         }
@@ -74,7 +76,7 @@ namespace HorseBase.Controllers
                         if (!user.IsActive)
                         {
                             // If the user is inactive, redirect to the No Access page
-                            return RedirectToAction("NoAccess", "Users");
+                            return RedirectToAction("Banned", "Home");
                         }
 
                         // Otherwise, sign in the user
@@ -119,30 +121,80 @@ namespace HorseBase.Controllers
             // Pass the list of UserViewModel to the view
             return View(userViewModels);
         }
+        [HttpPost]
+        public async Task<IActionResult> List(string? searchInput)
+        {
+            // Fetch all users from the UserManager
+            var users = _userManager.Users.ToList();
+            if (!string.IsNullOrEmpty(searchInput))
+            {
+                users = users.Where(x =>
+                    x.UserName.Contains(searchInput, StringComparison.OrdinalIgnoreCase) ||
+                    x.Email.Contains(searchInput, StringComparison.OrdinalIgnoreCase) ||
+                    x.FirstName.Contains(searchInput, StringComparison.OrdinalIgnoreCase) ||
+                    x.MiddleName.Contains(searchInput, StringComparison.OrdinalIgnoreCase) ||
+                    x.LastName.Contains(searchInput, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
+
+            // Create a list of UserViewModel to pass to the view
+            var userViewModels = new List<UserViewModel>();
+
+            foreach (var user in users)
+            {
+                // Get the roles for the user
+                var roles = await _userManager.GetRolesAsync(user);
+
+                // Create a UserViewModel for each user
+                var userViewModel = new UserViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    MiddleName = user.MiddleName,
+                    LastName = user.LastName,
+                    IsActive = user.IsActive,
+                    Roles = roles.ToList()
+                };
+
+                userViewModels.Add(userViewModel);
+            }
+
+            // Pass the list of UserViewModel to the view
+            return View(userViewModels);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStatus(IFormCollection form)
+        public async Task<IActionResult> UpdateStatus(string[]IsActive)
         {
-            // Iterate through all users' IsActive checkbox states
-            foreach (var key in form.Keys)
+            foreach(var user in _context.users)
             {
-                if (key.StartsWith("isActive_"))
+                if (IsActive.Contains(user.Id))
                 {
-                    // Extract the user ID from the key (e.g. "isActive_123")
-                    var userId = key.Substring("isActive_".Length);
-
-                    // Find the user by ID
-                    var user = await _userManager.FindByIdAsync(userId);
-                    if (user != null)
-                    {
-                        // Set the user's IsActive status based on the checkbox
-                        user.IsActive = form[key] == "on";  // If checkbox is checked, it sends "on"
-
-                        // Update the user in the database
-                        await _userManager.UpdateAsync(user);
-                    }
+                    user.IsActive = true;
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    user.IsActive = false;
+                    await _userManager.UpdateAsync(user);
                 }
             }
+            //Iterate through all users' IsActive checkbox states
+            //foreach (var key in form.Keys)
+            //{
+            //    if (key.StartsWith("isActive_"))
+            //    {
+            //        var userId = key.Substring("isActive_".Length);
+            //        var user = await _userManager.FindByIdAsync(userId);
+            //        if (user != null)
+            //        {
+            //            user.IsActive = form[key] == "on";
+            //            await _userManager.UpdateAsync(user);
+            //        }
+            //    }
+            //}
 
             return RedirectToAction("List");
         }

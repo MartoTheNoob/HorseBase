@@ -255,7 +255,22 @@ namespace HorseBase.Controllers
 
         public string GetAllHorses()
         {
-            return JsonConvert.SerializeObject(_context.horses.Include(x => x.Breed).ToList());
+            // Check if the user is logged in and has the "User" or "Admin" role
+            bool isLoged = User.IsInRole("User") || User.IsInRole("Admin");
+
+            // Fetch the list of horses with their associated breed information
+            var horses = _context.horses.Include(x => x.Breed).ToList();
+
+            // Create an anonymous object to hold both the horses and the login status
+            var result = new
+            {
+                Horses = horses,
+                IsLoged = isLoged
+            };
+
+            // Serialize the result to JSON and return it
+            return JsonConvert.SerializeObject(result);
         }
+
     }
 }

@@ -2,10 +2,13 @@
 const horses = []; // Array to store horse elements
 const speed = 2; // Speed of movement
 let horseCount;
+let isLoged; // Variable to store login status
 
 document.addEventListener("DOMContentLoaded", function () {
-    horsesController = GetData();
-    horseCount = horsesController.length;
+    const data = GetData(); // Call GetData to fetch the JSON response
+    horsesController = data.Horses; // Extract the list of horses
+    isLoged = data.IsLoged; // Extract the login status
+    horseCount = horsesController.length; // Get the number of horses
     spawnHorses();
     moveHorses();
 });
@@ -14,13 +17,13 @@ function GetData() {
     let result;
     $.ajax({
         url: '/Horse/GetAllHorses',
-        async: false,
+        async: false, // Synchronous request (not recommended for production)
         dataType: "json",
         success: (givenData) => {
-            result = givenData;
+            result = givenData; // Store the parsed JSON response
         },
     });
-    return result;
+    return result; // Return the parsed JSON object
 }
 
 // Function to create and spawn horses
@@ -86,7 +89,9 @@ function spawnHorses() {
 
         horse.addEventListener('click', () => {
             const horseId = horses[i].info.Id;
-            window.location.href = `/Horse/Details/${horseId}`;
+            if (isLoged){ 
+                window.location.href = `/Horse/Details/${horseId}`;
+            }
         });
     }
 }

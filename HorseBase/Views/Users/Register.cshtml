@@ -84,11 +84,28 @@
         .link:hover {
             color: #6d93d9;
         }
+    /* Error message styling */
+    .error-message {
+        background: rgba(255, 0, 0, 0.1); /* Light red background */
+        color: #dc3545; /* Red text color */
+        padding: 0.6rem 1rem; /* Padding for spacing */
+        border-radius: 8px; /* Rounded corners */
+        margin-bottom: 1rem; /* Space below the error message */
+        font-size: 14px; /* Smaller font size */
+        text-align: center; /* Center-aligned text */
+        border: 1px solid rgba(255, 0, 0, 0.3); /* Subtle red border */
+        box-shadow: 0 2px 5px rgba(255, 0, 0, 0.1); /* Soft shadow for depth */
+    }
 </style>
 
 <div class="container">
     <h1 class="big-title">REGISTER</h1>
-
+    @if (ViewData["error"] != null)
+    {
+        <div class="error-message">
+            @ViewData["error"]
+        </div>
+    }
     <form method="post">
         <div class="form-group">
             <label asp-for="UserName" class="control-label"></label>
