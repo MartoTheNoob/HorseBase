@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function GetData() {
     let result;
-    $.ajax({
+    $.ajax({ 
         url: '/Horse/GetAllHorses',
         async: false, // Synchronous request (not recommended for production)
         dataType: "json",
@@ -64,12 +64,12 @@ function spawnHorses() {
             horses[i].isHovered = true; // Stop movement
             tooltip.style.display = 'block';
             tooltip.innerHTML = `
-                <strong>Horse Number:</strong> ${horses[i].info.Number} <br>
-                <strong>Breed:</strong> ${horses[i].info.Breed.Name} <br>
-                <strong>Gender:</strong> ${horses[i].info.Gender} <br>
-                <strong>Price:</strong> ${horses[i].info.Price} <br>
-                <strong>Height:</strong> ${horses[i].info.Height} <br>
-                <strong>Year of Birth:</strong> ${horses[i].info.BirhtYear.toString().substring(0, 10)}
+                <strong>Номер:</strong> ${horses[i].info.Number} <br>
+                <strong>Порода:</strong> ${horses[i].info.Breed.Name} <br>
+                <strong>Пол:</strong> ${horses[i].info.Gender} <br>
+                <strong>Цена за час:</strong> ${horses[i].info.Price} <br>
+                <strong>Височина:</strong> ${horses[i].info.Height} <br>
+                <strong>Година на раждане:</strong> ${horses[i].info.BirhtYear.toString().substring(0, 10)}
             `;
 
             // Update tooltip position near mouse cursor

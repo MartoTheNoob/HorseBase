@@ -99,7 +99,7 @@
 </style>
 
 <div class="container">
-    <h1 class="big-title">REGISTER</h1>
+    <h1 class="big-title">Регистриране</h1>
     @if (ViewData["error"] != null)
     {
         <div class="error-message">
@@ -108,49 +108,49 @@
     }
     <form method="post">
         <div class="form-group">
-            <label asp-for="UserName" class="control-label"></label>
+            <label class="control-label">Потребителско Име</label>
             <input asp-for="UserName" class="form-control" />
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Email" class="control-label"></label>
+            <label class="control-label">Имейл</label>
             <input asp-for="Email" class="form-control" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Password" class="control-label"></label>
+            <label class="control-label">Парола</label>
             <input asp-for="Password" type="password" class="form-control" />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="FirstName" class="control-label"></label>
+            <label class="control-label">Собствено име</label>
             <input asp-for="FirstName" class="form-control" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="MiddleName" class="control-label"></label>
+            <label class="control-label">Бащино име</label>
             <input asp-for="MiddleName" class="form-control" />
             <span asp-validation-for="MiddleName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="LastName" class="control-label"></label>
+            <label class="control-label">Фамилно име</label>
             <input asp-for="LastName" class="form-control" />
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
 
         <!-- Submit Button -->
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Регестрирай се</button>
         </div>
     </form>
 
     <div style="margin-top: 1rem;">
-        Already have an account? <a href="@Url.Action("LogIn", "Users")" class="link">Log In</a>
+        Вече имаш профил? <a href="@Url.Action("LogIn", "Users")" class="link">Влез</a>
     </div>
 </div>
 

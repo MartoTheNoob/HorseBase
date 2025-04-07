@@ -104,23 +104,17 @@ namespace HorseBase.Controllers
                 {
                     if (photo.Length > 0)
                     {
-                        // Generate a unique filename for each photo
                         var fileName = Path.GetFileNameWithoutExtension(photo.FileName);
                         var extension = Path.GetExtension(photo.FileName);
                         var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName + extension);
 
-                        // Save each photo to the wwwroot/images folder
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await photo.CopyToAsync(stream);
                         }
-
-                        // Add the relative file path to the list
                         imagePaths.Add("/images/" + fileName + extension);
                     }
                 }
-
-                // Save the list of image paths as a comma-separated string
                 horse.PhotoPath = string.Join(",", imagePaths);
             }
 

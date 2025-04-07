@@ -298,7 +298,7 @@
 	<p style="text-align: center;">
 		@if (User.IsInRole("Admin"))
 		{
-			<a asp-action="Create" class="btn btn-primary">Създай нов</a>
+			<a asp-action="Create" class="btn btn-primary">Създай нов кон</a>
 		}
 	</p>
 	<!-- Изглед на списък -->
@@ -325,7 +325,7 @@
 						<td>@Html.DisplayFor(modelItem => item.BirhtYear.Year)</td>
 						<td>@Html.DisplayFor(modelItem => item.Gender)</td>
 						<td>@Html.DisplayFor(modelItem => item.Height)</td>
-						<td>@Html.DisplayFor(modelItem => item.Price)</td>
+						<td>@Html.DisplayFor(modelItem => item.Price) лв.</td>
 						<td>
 							@if (!string.IsNullOrEmpty(item.PhotoPath))
 							{
@@ -374,17 +374,17 @@
 		<label for="genderFilter">Пол</label>
 		<select id="genderFilter" name="genderFilter">
 			<option value="">Всички полове</option>
-			<option value="Male">Мъжки</option>
-			<option value="Female">Женски</option>
+			<option value="Мъжки">Мъжки</option>
+			<option value="Женски">Женски</option>
 		</select>
 
 		<!-- Обхват на годината на раждане -->
 		<label for="birthYearMinFilter">Година на раждане (Мин)</label>
-		<input type="range" id="birthYearMinFilter" name="birthYearMinFilter" min="1900" max="2023" value="1900" />
-		<span id="birthYearMinValue">1900</span>
+		<input type="range" id="birthYearMinFilter" name="birthYearMinFilter" min="1990" max="2025" value="1990" />
+		<span id="birthYearMinValue">1990</span>
 
 		<label for="birthYearMaxFilter">Година на раждане (Макс)</label>
-		<input type="range" id="birthYearMaxFilter" name="birthYearMaxFilter" min="1900" max="2023" value="2023" />
+		<input type="range" id="birthYearMaxFilter" name="birthYearMaxFilter" min="1990" max="2025" value="2025" />
 		<span id="birthYearMaxValue">2023</span>
 
 		<!-- Обхват на височината -->
@@ -398,12 +398,12 @@
 
 		<!-- Обхват на цената -->
 		<label for="priceMinFilter">Цена (Мин)</label>
-		<input type="range" id="priceMinFilter" name="priceMinFilter" min="0" max="10000" value="0" />
-		<span id="priceMinValue">$0</span>
+		<input type="range" id="priceMinFilter" name="priceMinFilter" min="0" max="500" value="0" />
+		<span id="priceMinValue">0лв</span>
 
 		<label for="priceMaxFilter">Цена (Макс)</label>
-		<input type="range" id="priceMaxFilter" name="priceMaxFilter" min="0" max="10000" value="10000" />
-		<span id="priceMaxValue">$10000</span>
+		<input type="range" id="priceMaxFilter" name="priceMaxFilter" min="0" max="500" value="500" />
+		<span id="priceMaxValue">500лв</span>
 
 		<button type="button" id="applyFilters">Приложи филтрите</button>
 	</form>
@@ -531,9 +531,8 @@
 		applyFiltersButton.addEventListener("click", () => {
 			currentPage = 1; // Reset to first page
 
-			const searchFilter = document.getElementById("searchFilter").value.toLowerCase();
-			const breedFilter = document.getElementById("breedFilter").value;
-			const genderFilter = document.getElementById("genderFilter").value;
+			const breedFilter = document.getElementById("breedFilter").value.trim();
+			const genderFilter = document.getElementById("genderFilter").value.trim();
 			const birthYearMin = parseInt(document.getElementById("birthYearMinFilter").value) || 0;
 			const birthYearMax = parseInt(document.getElementById("birthYearMaxFilter").value) || Infinity;
 			const heightMin = parseInt(document.getElementById("heightMinFilter").value) || 0;
@@ -547,9 +546,8 @@
 				const price = parseInt(horse.price);
 
 				return (
-					(searchFilter === "" || horse.breed.toLowerCase().includes(searchFilter)) &&
-					(breedFilter === "" || horse.breed === breedFilter) &&
-					(genderFilter === "" || horse.gender === genderFilter) &&
+					(breedFilter === "" || decodeHtmlEntities(horse.breed) === breedFilter) &&
+					(genderFilter === "" || decodeHtmlEntities(horse.gender) === genderFilter) &&
 					birthYear >= birthYearMin &&
 					birthYear <= birthYearMax &&
 					height >= heightMin &&
@@ -574,8 +572,9 @@
 		function updateListView(filteredHorses) {
 			const tableBody = listView.querySelector("tbody");
 			tableBody.innerHTML = "";
-
+			
 			filteredHorses.forEach(horse => {
+				console.log(horse.price)
 				const row = document.createElement("tr");
 				const isAdmin = @User.IsInRole("Admin").ToString().ToLower();
 				const actionsHtml = isAdmin
@@ -592,7 +591,7 @@
 					<td>${horse.birthYear}</td>
 					<td>${horse.gender}</td>
 					<td>${horse.height}</td>
-					<td>$${horse.price}</td>
+					<td>${horse.price} лв.</td>
 					<td><img src="${horse.photo || '/images/horse_profile.jpg'}" style="width: 100px; height: auto;" /></td>
 					<td>${actionsHtml}</td>
 				`;
@@ -619,11 +618,15 @@
 		});
 
 		document.getElementById("priceMinFilter").addEventListener("input", (e) => {
-			document.getElementById("priceMinValue").textContent = `$${e.target.value}`;
+			document.getElementById("priceMinValue").textContent = `${e.target.value}лв`;
 		});
 
 		document.getElementById("priceMaxFilter").addEventListener("input", (e) => {
-			document.getElementById("priceMaxValue").textContent = `$${e.target.value}`;
+			document.getElementById("priceMaxValue").textContent = `${e.target.value}лв`;
 		});
+		function decodeHtmlEntities(text) {
+			var doc = new DOMParser().parseFromString(text, 'text/html');
+			return doc.documentElement.textContent;
+		}
 	});
 	</script>

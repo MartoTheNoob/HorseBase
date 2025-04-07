@@ -1,73 +1,73 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Начална страница";
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Начална страница</title>
     <style>
-        /* General body styling */
+        /* Общ стил за тялото */
         body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        position: relative; /* Ensure absolute positioning works within the body */
-        min-height: 100vh;
-        min-width: 100vw;
-        background-color: transparent; /* Ensure it doesn't conflict with the overlay */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative; /* Гарантира, че абсолютното позициониране работи в рамките на body */
+            min-height: 100vh;
+            min-width: 100vw;
+            background-color: transparent; /* Уверява, че не пречи на слоя отгоре */
         }
 
-        /* Logo styling */
+        /* Стил на логото */
         .logo {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        width: 150px; /* Adjust the size as needed */
-        z-index: 110; /* Ensure it appears above the overlay */
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px; /* Регулира размера при нужда */
+            z-index: 110; /* Уверява, че се появява над слоя отгоре */
         }
 
-        /* Big Button styling */
+        /* Стил на големия бутон */
         .big-button {
-        position: absolute;
-        bottom: 20px; /* Distance from the bottom */
-        left: 50%; /* Center horizontally */
-        transform: translateX(-50%); /* Perfectly center the button */
-        z-index: 110; /* Ensure it appears above the overlay */
-        background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Subtle gradient for modern look */
-        color: #333; /* Dark text for contrast */
-        border: none;
-        padding: 15px 30px; /* Padding for content spacing */
-        font-size: 16px; /* Font size */
-        border-radius: 8px; /* Rounded corners */
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-        height: 50px; /* Auto height based on content */
-        width: 200px; /* Auto width based on content */
-        font-weight: bold;
-        text-transform: uppercase; /* Uppercase text */
-        letter-spacing: 1px; /* Spacing between letters */
-        transition: all 0.3s ease; /* Smooth transitions */
-        outline: none; /* Remove default focus outline */
+            position: absolute;
+            bottom: 20px; /* Разстояние отдолу */
+            left: 50%; /* Центриране по хоризонтала */
+            transform: translateX(-50%); /* Перфектно центриране на бутона */
+            z-index: 110; /* Уверява, че се появява над слоя отгоре */
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Лек градиент за модерен вид */
+            color: #333; /* Тъмен текст за контраст */
+            border: none;
+            padding: 15px 30px; /* Отстояния за по-добро оформление */
+            font-size: 16px; /* Размер на шрифта */
+            border-radius: 8px; /* Закръглени ъгли */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Леки сенки за дълбочина */
+            height: 75px; /* Автоматична височина според съдържанието */
+            width: 200px; /* Автоматична ширина според съдържанието */
+            font-weight: bold;
+            text-transform: uppercase; /* Главни букви */
+            letter-spacing: 1px; /* Разстояние между буквите */
+            transition: all 0.3s ease; /* Плавни преходи */
+            outline: none; /* Премахване на стандартната контурна рамка */
         }
 
-        /* Hover Effect - Semi-Transparent Background */
-        .big-button:hover {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.5)); /* Semi-transparent gradient */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for modern effect */
-        color: #2c3e50; /* Slightly darker text for better contrast */
-        }
+            /* Ефект при задържане - полупрозрачен фон */
+            .big-button:hover {
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.5)); /* Полупрозрачен градиент */
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Подсилена сянка за модерен ефект */
+                color: #2c3e50; /* Леко по-тъмен текст за по-добър контраст */
+            }
 
     </style>
 </head>
 <body>
-    <!-- Logo -->
-    <img src="/images/logo.png" alt="Logo" class="logo">
+    <!-- Лого -->
+    <img src="/images/logo.png" alt="Лого" class="logo">
 
-    <!-- Big Button -->
+    <!-- Голям бутон -->
     @if (User.IsInRole("Admin") || User.IsInRole("User"))
     {
-    <a asp-controller="Horse" asp-action="Index" class="button big-button">Избери си кон</a>        
+        <a asp-controller="Horse" asp-action="Index" class="button big-button">Разгледайте конете!</a>
     }
 </body>
 </html>

@@ -24,7 +24,6 @@ namespace HorseBase.Models
         [Required, Display(Name = "Височина")]
         public int Height { get; set; }
 
-        [DataType(DataType.Currency)]
         [Required, Display(Name = "Цена")]
         public double Price { get; set; }
 

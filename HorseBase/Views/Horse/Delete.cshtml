@@ -1,11 +1,11 @@
 ﻿@model HorseBase.Models.Horse
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Изтриване";
 }
 
 <style>
-    /* Existing container styling */
+    /* Стилизиране на контейнера */
     .container {
         background: rgba(230, 200, 160);
         border-radius: 15px;
@@ -14,9 +14,28 @@
         margin: 2rem auto;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(10px);
+        max-height: 95vh; /* Enable vertical scrolling */
+        overflow-y: auto; /* Add vertical scrollbar when needed */
+        scrollbar-color: #8ea7e9 #f8f9fa; /* Custom scrollbar colors */
+        scrollbar-width: thin; /* Thin scrollbar for modern browsers */
         position: relative;
         z-index: 2;
     }
+
+        /* Scrollbar styling for Webkit browsers */
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: #8ea7e9;
+            border-radius: 10px;
+        }
 
     .dl-horizontal {
         display: grid;
@@ -33,7 +52,6 @@
         color: #343a40;
     }
 
-    /* Centered alert styling */
     .alert-danger {
         background: rgba(255, 82, 82, 0.2);
         border: 1px solid rgba(255, 82, 82, 0.3);
@@ -53,7 +71,6 @@
             margin-bottom: 0;
         }
 
-    /* Danger button styling */
     .btn-danger {
         background: linear-gradient(135deg, #ff7a7a, #ff5252);
         border: none;
@@ -70,7 +87,6 @@
             box-shadow: 0 6px 15px rgba(255, 82, 82, 0.4);
         }
 
-    /* Styled cancel button */
     .btn-secondary {
         background: linear-gradient(135deg, #8ea7e9, #a8c0ff);
         border: none;
@@ -87,7 +103,6 @@
             box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
         }
 
-    /* Responsive image */
     .photo-preview {
         max-width: 300px;
         height: auto;
@@ -98,37 +113,37 @@
 </style>
 
 <div class="container">
-    <h1 class="big-title">DELETE HORSE</h1>
+    <h1 class="big-title">ИЗТРИВАНЕ</h1>
 
     <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">⚠️ Permanent Deletion</h4>
-        <p>This action cannot be undone. All associated data including photos will be permanently removed.</p>
+        <h4 class="alert-heading">⚠️ Перманентно изтриване</h4>
+        <p>Това действие не може да бъде отменено. Всички свързани данни, включително снимки, ще бъдат безвъзвратно премахнати.</p>
     </div>
 
     <dl class="dl-horizontal">
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Number)</dt>
+            <dt>Номер</dt>
             <dd>@Html.DisplayFor(model => model.Number)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Breed.Name)</dt>
+            <dt>Порода</dt>
             <dd>@Html.DisplayFor(model => model.Breed.Name)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.BirhtYear)</dt>
+            <dt>Година на раждане</dt>
             <dd>@Html.DisplayFor(model => model.BirhtYear)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Gender)</dt>
+            <dt>Пол</dt>
             <dd>@Html.DisplayFor(model => model.Gender)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Height)</dt>
+            <dt>Височина</dt>
             <dd>@Html.DisplayFor(model => model.Height)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Price)</dt>
-            <dd>@Html.DisplayFor(model => model.Price)$</dd>
+            <dt>Цена за час</dt>
+            <dd>@Html.DisplayFor(model => model.Price) лв.</dd>
         </div>
         <div>
             <dt>@Html.DisplayNameFor(model => model.PhotoPath)</dt>
@@ -145,8 +160,8 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <div class="d-flex justify-content-center gap-3">
-            <input type="submit" value="Confirm Delete" class="btn btn-danger" />
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <input type="submit" value="Потвърди изтриването" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
         </div>
     </form>
 </div>

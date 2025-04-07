@@ -1,38 +1,37 @@
 ﻿@model HorseBase.Models.Horse
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Създай";
 }
 
 <style>
-    /* Add this to your site.css or a new CSS file */
     .create-form {
         background: rgba(255, 255, 255, 0.15);
         border-radius: 15px;
-        padding: 1.5rem; /* Reduced padding for shorter page */
+        padding: 1.5rem;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         max-width: 500px;
-        margin: 1rem auto; /* Reduced margin for shorter page */
+        margin: 1rem auto;
     }
 
     .form-group {
-        margin-bottom: 1rem; /* Reduced margin for shorter page */
+        margin-bottom: 1rem;
     }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             text-align: center;
-            font-size: 18px; /* Slightly reduced font size */
+            font-size: 18px;
         }
 
     .form-control {
         background: rgba(255, 255, 255, 0.2);
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
-        padding: 0.6rem 1rem; /* Reduced padding for shorter page */
+        padding: 0.6rem 1rem;
         color: #343a40;
         transition: all 0.3s ease;
     }
@@ -47,7 +46,7 @@
     .btn-primary {
         background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
         border: none;
-        padding: 0.6rem 1.5rem; /* Reduced padding for shorter page */
+        padding: 0.6rem 1.5rem;
         border-radius: 25px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 10px rgba(142, 167, 233, 0.3);
@@ -59,19 +58,17 @@
             transform: translateY(-2px);
         }
 
-    /* Radio button styling */
     .radio-container {
         display: flex;
-        gap: 1rem; /* Adds spacing between radio buttons */
-        justify-content: center; /* Centers the radio buttons */
-        font-size: 14px; /* Sets font size for radio button labels */
+        gap: 1rem;
+        justify-content: center;
+        font-size: 14px;
     }
 
-    .radio-container input[type="radio"] {
-        margin-right: 0.2rem; /* Adds spacing between the radio button and its label */
-    }
+        .radio-container input[type="radio"] {
+            margin-right: 0.2rem;
+        }
 
-    /* Page background styling */
     body {
         background: linear-gradient(135deg, #f8f9fa, #e9ecef);
         min-height: 100vh;
@@ -82,19 +79,19 @@
         font-size: 24px;
         font-weight: bold;
         text-align: center;
-        margin-bottom: 1.5rem; /* Space below the title */
+        margin-bottom: 1.5rem;
         color: #343a40;
     }
 
     .container {
-        background: rgba(230, 200, 160); /* Increased opacity for better contrast */
+        background: rgba(230, 200, 160);
         border-radius: 15px;
-        padding: 1.5rem; /* Reduced padding for shorter page */
+        padding: 1.5rem;
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         max-width: 500px;
         width: 100%;
-        margin: 1rem auto; /* Reduced margin for shorter page */
+        margin: 1rem auto;
         position: relative;
         z-index: 2;
     }
@@ -103,24 +100,23 @@
 <div class="container">
     <div class="row">
         <div>
-            <h1 class="big-title">CREATE</h1>
-            <!-- Form to submit data, enctype="multipart/form-data" to allow file uploads -->
+            <h1 class="big-title">СЪЗДАЙ</h1>
             <form asp-action="Create" enctype="multipart/form-data" class="d-flex flex-column">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-group">
-                    <label asp-for="Number" class="control-label"></label>
+                    <label asp-for="Number" class="control-label">Номер</label>
                     <input asp-for="Number" class="form-control" />
                     <span asp-validation-for="Number" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="BreedId" class="control-label"></label>
+                    <label asp-for="BreedId" class="control-label">Порода</label>
                     <select asp-for="BreedId" class="form-control" asp-items="ViewBag.BreedId"></select>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="BirhtYear" class="control-label"></label>
+                    <label asp-for="BirhtYear" class="control-label">Година на раждане</label>
                     <input asp-for="BirhtYear" class="form-control" />
                     <span asp-validation-for="BirhtYear" class="text-danger"></span>
                 </div>
@@ -129,39 +125,38 @@
                     <label class="control-label">Пол</label>
                     <div class="radio-container">
                         <label>
-                            <input type="radio" asp-for="Gender" value="Male" /> Мъжки
+                            <input type="radio" asp-for="Gender" value="Мъжки" /> Мъжки
                         </label>
                         <label>
-                            <input type="radio" asp-for="Gender" value="Female" /> Женски
+                            <input type="radio" asp-for="Gender" value="Женски" /> Женски
                         </label>
                     </div>
                     <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Height" class="control-label"></label>
+                    <label asp-for="Height" class="control-label">Височина</label>
                     <input asp-for="Height" class="form-control" />
                     <span asp-validation-for="Height" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Price" class="control-label"></label>
+                    <label asp-for="Price" class="control-label">Цена</label>
                     <input asp-for="Price" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
-                <!-- File input field for photos -->
                 <div class="form-group">
-                    <label asp-for="PhotoPath" class="control-label"></label>
+                    <label asp-for="PhotoPath" class="control-label">Снимки</label>
                     <input type="file" name="photos" multiple class="form-control" />
                     <span asp-validation-for="PhotoPath" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary w-100 text-center" />
+                    <input type="submit" value="Създай" class="btn btn-primary w-100 text-center" />
                 </div>
                 <div>
-                    <a asp-action="Index" class="btn btn-primary w-100">Back to List</a>
+                    <a asp-action="Index" class="btn btn-primary w-100">Обратно към списъка</a>
                 </div>
             </form>
         </div>

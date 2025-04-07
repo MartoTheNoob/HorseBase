@@ -115,9 +115,9 @@
     }
 
     /* Responsive image carousel */
-    /* Responsive image carousel */
     .photo-preview-container {
         position: relative;
+        width:100%;
         max-width: 100%; /* Ensure it doesn't exceed the parent container */
         height: auto; /* Dynamically adjust height based on the image */
         margin: 1rem auto;
@@ -127,8 +127,8 @@
     /* Smooth transition for image changes */
     .photo-preview {
         width: 100%; /* Make the image responsive */
-        max-width: 100px; /* Set a maximum width of 300px */
         height: auto; /* Maintain aspect ratio */
+        max-height: 501.75px;
         border-radius: 8px;
         position: absolute; /* Stack images on top of each other */
         top: 0;
@@ -169,12 +169,12 @@
 </style>
 
 <div class="container">
-    <h1 class="big-title">HORSE DETAILS</h1>
+    <h1 class="big-title">Детайли</h1>
 
     <dl class="dl-details">
         <!-- Photo Preview -->
         <div>
-            <dt>Photo</dt>
+            <dt>Снимки</dt>
             <dd>
                 @if (!string.IsNullOrEmpty(Model.PhotoPath))
                 {
@@ -201,38 +201,38 @@
             </dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Number)</dt>
+            <dt>Номер</dt>
             <dd>@Html.DisplayFor(model => model.Number)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Breed.Name)</dt>
+            <dt>Порода</dt>
             <dd>@Html.DisplayFor(model => model.Breed.Name)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.BirhtYear)</dt>
+            <dt>Година на раждане</dt>
             <dd>@Html.DisplayFor(model => model.BirhtYear)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Gender)</dt>
+            <dt>Пол</dt>
             <dd>@Html.DisplayFor(model => model.Gender)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Height)</dt>
+            <dt>Височина</dt>
             <dd>@Html.DisplayFor(model => model.Height)</dd>
         </div>
         <div>
-            <dt>@Html.DisplayNameFor(model => model.Price)</dt>
-            <dd>@Html.DisplayFor(model => model.Price)</dd>
+            <dt>Цена за час</dt>
+            <dd>@Html.DisplayFor(model => model.Price) лв.</dd>
         </div>
     </dl>
 
     <div class="button-group">
         @if (User.IsInRole("Admin"))
         {
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Редактирай</a>
         }
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-        <a asp-controller="Reservation" asp-action="Create" asp-route-horseId="@Model.Id" class="btn btn-primary">Reserve</a>
+        <a asp-action="Index" class="btn btn-secondary">Връщане в листа</a>
+        <a asp-controller="Reservation" asp-action="Create" asp-route-horseId="@Model.Id" class="btn btn-primary">Резервирай</a>
     </div>
 </div>
 

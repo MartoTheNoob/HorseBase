@@ -30,11 +30,12 @@ namespace HorseBase.Controllers
             {
                 HorseId = horse.Id,
                 Horse = horse,
-                Price = 0 // Initial value, dynamically updated based on user input
+                Price = 0
             };
 
             return View(reservation);
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(ReservationViewModel reservationRequest)
         {
@@ -96,6 +97,5 @@ namespace HorseBase.Controllers
 
             return Json(new { isOverlapping });
         }
-
     }
 }

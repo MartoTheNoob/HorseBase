@@ -81,19 +81,19 @@
         @if (User.IsInRole("Admin"))
         {
             <a class="button manage-button" asp-controller="Users" asp-action="List" title="Manage">
-                Hello @User.Identity?.Name!
+                Здравей @User.Identity?.Name!
             </a>
         }
         else
         {
             <a class="button manage-button" asp-controller="Users" asp-action="Reservations" title="Manage">
-                Hello @User.Identity?.Name!
+                Здравей @User.Identity?.Name!
             </a>
         }
 
         <!-- Logout Button -->
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="button logout-button">Logout</button>
+            <button type="submit" class="button logout-button">Излез</button>
         </form>
     </div>
 }
@@ -101,9 +101,9 @@ else
 {
     <div style="display: flex; flex-direction: column; gap: 10px;">
         <!-- Register Button -->
-        <a class="button register-button" asp-controller="Users" asp-action="Register">Register</a>
+        <a class="button register-button" asp-controller="Users" asp-action="Register">Регестрирай се</a>
 
         <!-- Login Button -->
-        <a class="button login-button" asp-controller="Users" asp-action="LogIn">Login</a>
+        <a class="button login-button" asp-controller="Users" asp-action="LogIn">Влез</a>
     </div>
 }

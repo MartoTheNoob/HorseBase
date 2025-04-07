@@ -23,7 +23,7 @@
 		background: rgb(230, 200, 160);
 		border-radius: 15px;
 		padding: 1.5rem;
-		max-width: 1000px;
+		max-width: 1200px;
 		margin: 0 auto;
 		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 		position: relative;
@@ -213,15 +213,15 @@
 
 <div class="container">
 	<!-- Back button -->
-	<a href="/" class="back-button">Back to Home</a>
+	<a href="/" class="back-button">Върни се обратно</a>
 
-	<h1 class="big-title">USER LIST</h1>
+	<h1 class="big-title">Потребители</h1>
 
 	<!-- Search bar -->
 	<div class="search-bar">
 		<form asp-controller="Users" asp-action="List">
-			<input type="text" id="searchInput" name="searchInput" placeholder="Search by name or email..." />
-			<button type="submit" class="search-button">Search</button>
+			<input type="text" id="searchInput" name="searchInput" placeholder="Търсене по име или имейл..." />
+			<button type="submit" class="search-button">Търсене</button>
 		</form>
 	</div>
 
@@ -229,9 +229,9 @@
 		<!-- Items per page selector -->
 		<div class="form-group">
 			<select id="itemsPerPage" class="form-select">
-				<option value="4">4 per page</option>
-				<option value="6">6 per page</option>
-				<option value="8" selected>8 per page</option>
+				<option value="4">4 за страница</option>
+				<option value="6">6 за страница</option>
+				<option value="8" selected>8 за страница</option>
 			</select>
 		</div>
 
@@ -239,13 +239,13 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Username</th>
-					<th>Email</th>
-					<th>First Name</th>
-					<th>Middle Name</th>
-					<th>Last Name</th>
-					<th>Is Active</th>
-					<th>Roles</th>
+					<th>Потребителско име</th>
+					<th>Емейл</th>
+					<th>Собствено име</th>
+					<th>Бащино име</th>
+					<th>Фамилно име</th>
+					<th>Валидност</th>
+					<th>Роля</th>
 				</tr>
 			</thead>
 			<tbody id="userTableBody">
@@ -273,7 +273,7 @@
 
 		<!-- Save button -->
 		<div class="form-group">
-			<button type="submit" class="btn btn-primary">Save Changes</button>
+			<button type="submit" class="btn btn-primary">Запази промените</button>
 		</div>
 	</form>
 </div>

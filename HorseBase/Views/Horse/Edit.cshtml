@@ -1,10 +1,10 @@
 ﻿@model HorseBase.Models.Horse
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактиране";
     var existingPhotos = ViewBag.ExistingPhotos as List<string> ?? new List<string>();
 }
 <style>
-    /* Consistent container styling */
+    /* Консистентен стил за контейнера */
     .container {
         background: rgba(230, 200, 160);
         border-radius: 15px;
@@ -13,14 +13,14 @@
         margin: 0 auto;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(10px);
-        max-height: 95vh; /* Enable vertical scrolling */
-        overflow-y: auto; /* Add vertical scrollbar when needed */
-        scrollbar-color: #8ea7e9 #f8f9fa; /* Custom scrollbar colors */
-        scrollbar-width: thin; /* Thin scrollbar for modern browsers */
+        max-height: 95vh; /* Разрешава вертикално скролиране */
+        overflow-y: auto; /* Добавя вертикален скрол, ако е необходимо */
+        scrollbar-color: #8ea7e9 #f8f9fa; /* Персонализирани цветове за скролера */
+        scrollbar-width: thin; /* Тънък скролер за модерни браузъри */
         position: relative;
         z-index: 2;
     }
-        /* Scrollbar styling for Webkit browsers */
+        /* Стил за скролера в Webkit браузъри */
         .container::-webkit-scrollbar {
             width: 8px;
         }
@@ -42,7 +42,7 @@
         margin-bottom: 1.5rem;
         color: #343a40;
     }
-    /* Form group styling */
+    /* Стил за групите на формата */
     .form-group {
         margin-bottom: 1rem;
     }
@@ -70,7 +70,7 @@
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
             outline: none;
         }
-    /* Radio button styling */
+    /* Стил за радио бутони */
     .radio-container {
         display: flex;
         gap: 1rem;
@@ -82,7 +82,7 @@
         .radio-container input[type="radio"] {
             margin-right: 0.5rem;
         }
-    /* Primary button styling */
+    /* Основен стил за бутона */
     .btn-primary {
         background: linear-gradient(135deg, rgba(142, 167, 233, 0.8), rgba(187, 209, 253, 0.8));
         border: none;
@@ -99,7 +99,7 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(142, 167, 233, 0.4);
         }
-    /* Secondary button styling */
+    /* Стил за втори бутон */
     .btn-secondary {
         background: linear-gradient(135deg, #8ea7e9, #a8c0ff);
         border: none;
@@ -118,77 +118,68 @@
         }
 </style>
 <div class="container">
-    <h1 class="big-title">EDIT HORSE</h1>
-    <!-- Form to submit data, enctype="multipart/form-data" to allow file uploads -->
+    <h1 class="big-title">РЕДАКТИРАЙ КОН</h1>
+    <!-- Форма за изпращане на данни, enctype="multipart/form-data" за позволяване на качване на файлове -->
     <form asp-action="Edit" enctype="multipart/form-data" class="d-flex flex-column">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-        <!-- Number Field -->
+        <!-- Поле за номер -->
         <div class="form-group">
-            <label asp-for="Number" class="control-label"></label>
+            <label>Номер</label>
             <input asp-for="Number" class="form-control" />
             <span asp-validation-for="Number" class="text-danger"></span>
         </div>
-        <!-- Breed Field -->
+        <!-- Поле за порода -->
         <div class="form-group">
-            <label asp-for="BreedId" class="control-label"></label>
+            <label>Порода</label>
             <select asp-for="BreedId" class="form-control" asp-items="ViewBag.BreedId"></select>
             <span asp-validation-for="BreedId" class="text-danger"></span>
         </div>
-        <!-- Birth Year Field -->
+        <!-- Поле за година на раждане -->
         <div class="form-group">
-            <label asp-for="BirhtYear" class="control-label"></label>
+            <label>Година на раждане</label>
             <input asp-for="BirhtYear" class="form-control" />
             <span asp-validation-for="BirhtYear" class="text-danger"></span>
         </div>
-        <!-- Gender Field -->
+        <!-- Поле за пол -->
         <div class="form-group">
-            <label class="control-label">Gender</label>
+            <label>Пол</label>
             <div class="radio-container">
                 <label>
-                    <input type="radio" asp-for="Gender" value="Male" /> Male
+                    <input type="radio" asp-for="Gender" value="Мъжки" /> Мъжки
                 </label>
                 <label>
-                    <input type="radio" asp-for="Gender" value="Female" /> Female
+                    <input type="radio" asp-for="Gender" value="Женски" /> Женски
                 </label>
             </div>
             <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
-        <!-- Height Field -->
+        <!-- Поле за височина -->
         <div class="form-group">
-            <label asp-for="Height" class="control-label"></label>
+            <label>Височина</label>
             <input asp-for="Height" class="form-control" />
             <span asp-validation-for="Height" class="text-danger"></span>
         </div>
-        <!-- Price Field -->
+        <!-- Поле за цена -->
         <div class="form-group">
-            <label asp-for="Price" class="control-label"></label>
+            <label>Цена за час</label>
             <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
-        <!-- Photo Upload Field -->
-        <div class="form-group">
-            <label class="control-label">Existing Photos</label>
-            <div style="display: flex; gap: 1rem; justify-content: center;">
-                @foreach (var photo in existingPhotos)
-                {
-                    <img src="@photo" style="width: 100px; height: auto;" />
-                }
-            </div>
-        </div>
+        <!-- Поле за качване на снимки -->
         <div class="form-group">
             <label asp-for="PhotoPath" class="control-label"></label>
             <input type="file" name="photos" multiple class="form-control" />
             <span asp-validation-for="PhotoPath" class="text-danger"></span>
         </div>
-        <!-- Submit Button -->
+        <!-- Бутон за изпращане -->
         <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
+            <input type="submit" value="Запази" class="btn btn-primary" />
         </div>
     </form>
-    <!-- Back to List Button -->
+    <!-- Бутон за връщане в списъка -->
     <div style="text-align: center; margin-top: 1rem;">
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="Index" class="btn btn-secondary">Върни се в списъка</a>
     </div>
 </div>
 @section Scripts {

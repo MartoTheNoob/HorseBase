@@ -121,6 +121,7 @@ namespace HorseBase.Controllers
             // Pass the list of UserViewModel to the view
             return View(userViewModels);
         }
+
         [HttpPost]
         public async Task<IActionResult> List(string? searchInput)
         {
@@ -181,36 +182,16 @@ namespace HorseBase.Controllers
                     await _userManager.UpdateAsync(user);
                 }
             }
-            //Iterate through all users' IsActive checkbox states
-            //foreach (var key in form.Keys)
-            //{
-            //    if (key.StartsWith("isActive_"))
-            //    {
-            //        var userId = key.Substring("isActive_".Length);
-            //        var user = await _userManager.FindByIdAsync(userId);
-            //        if (user != null)
-            //        {
-            //            user.IsActive = form[key] == "on";
-            //            await _userManager.UpdateAsync(user);
-            //        }
-            //    }
-            //}
-
             return RedirectToAction("List");
-        }
-
-
-        public class HomeController : Controller
-        {
-            public IActionResult NoAccess()
-            {
-                return View();
-            }
         }
 
         public IActionResult Reservations()
         {
-            List<Reservation> userReservation = _context.reservations.Include(x => x.Horse).ThenInclude(x => x.Breed).Where(x => x.User.UserName == User.Identity.Name).ToList();
+            List<Reservation> userReservation = _context.reservations
+                .Include(x => x.Horse)
+                .ThenInclude(x => x.Breed)
+                .Where(x => x.User.UserName == User.Identity.Name)
+                .ToList();
             return View(userReservation);
         }
 
